@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZE3kr/BJUT-Helper-Mini-Program.git"
+    "url": "git+https://github.com/ZE3kr/BjutHelper-MiniProgram.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ZE3kr/BJUT-Helper-Mini-Program/issues"
+    "url": "https://github.com/ZE3kr/BjutHelper-MiniProgram/issues"
   },
-  "homepage": "https://github.com/ZE3kr/BJUT-Helper-Mini-Program#readme"
+  "homepage": "https://github.com/ZE3kr/BjutHelper-MiniProgram#readme"
 }
