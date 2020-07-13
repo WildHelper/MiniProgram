@@ -352,6 +352,12 @@ Page({
         default:
           return 0
       }
+      if (typeof score0 !== 'number' || isNaN(score0)) {
+        score0 = -1
+      }
+      if (typeof score1 !== 'number' || isNaN(score1)) {
+        score1 = -1
+      }
       // 默认降序，再次点击后升序
       if (d) {
         return score1 - score0
