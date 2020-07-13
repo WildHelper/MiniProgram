@@ -1,0 +1,50 @@
+<!-- 总成绩 -->
+<view wx:for="{{messages}}" class="message">{{item}}</view>
+
+<view wx:for="{{exams}}" class="totalScore" bindtap="bindtapHandeler" data-from="total">
+  <view class="line1">
+    <text class="title"><text wx:if="{{item.name === 'CET4'}}">大学英语四级 </text><text wx:elif="{{item.name === 'CET6'}}">大学英语六级 </text>{{item.name}}</text>
+  </view>
+
+  <view class="line3">
+    <text class="subTitle">{{item.date}}</text>
+    <text class="subTitle pass-{{item.total >= 425 ? 3 : 0}}">{{item.PorF}}</text>
+  </view>
+
+  <view class="line2">
+    <view class="item">
+      <view class="title">
+        <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+        <text class="icon-inline-text">总分</text>
+      </view>
+      <text class="value">{{item.total}}</text>
+    </view>
+    <view class="item">
+      <view class="title">
+        <span class="icon-inline icon-listening"><span class="path1"></span><span class="path2"></span></span>
+        <text class="icon-inline-text">听力</text>
+        <view class="preimg"></view>
+      </view>
+      <text class="value" wx:if="{{item.listening > 0}}">{{item.listening}}</text>
+      <text class="value" wx:else>—</text>
+    </view>
+    <view class="item">
+      <view class="title">
+        <span class="icon-inline icon-reading"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+        <text class="icon-inline-text">阅读</text>
+      </view>
+      <text class="value" wx:if="{{item.reading > 0}}">{{item.reading}}</text>
+      <text class="value" wx:else>—</text>
+    </view>
+    <view class="item_1">
+      <view class="title">
+        <span class="icon-inline icon-writing"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+        <text class="icon-inline-text">写作</text>
+      </view>
+      <text class="value" wx:if="{{item.comprehensive > 0}}">{{item.comprehensive}}</text>
+      <text class="value" wx:else>—</text>
+    </view>
+  </view>
+  
+  <view class="update-time" wx:if="{{index === exams.length - 1}}">更新时间：{{time}}</view>
+</view>

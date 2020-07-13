@@ -1,0 +1,7 @@
+{
+    "usingComponents": {
+        "mp-actionSheet": "/miniprogram_npm/weui-miniprogram/actionsheet/actionsheet",
+        "mp-msg": "/miniprogram_npm/weui-miniprogram/msg/msg"
+    },
+    "navigationBarTitleText": "关于"
+}

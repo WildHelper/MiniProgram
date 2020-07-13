@@ -1,0 +1,212 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+
+<!--<view>-->
+<!--  <canvas class="watermark-canvas" canvas-id="waterMarkCanvas"></canvas>-->
+<!--</view>-->
+
+<view class="page">
+  <view class="watermark" style='background-image: url({{backgroundImg}});'></view>
+  <!--  "你的成绩"卡片 -->
+  <text class="head" wx:if="{{(!demo && !hidePersonal) || yourScore < 0}}">你的成绩</text>
+  <view class="totalScore" wx:if="{{(!demo && !hidePersonal) || yourScore < 0}}">
+    <view class="line1">
+      <text class="title" wx:if="{{yourName}}">{{yourName}}的</text>
+      <text class="title">{{className}}</text>
+    </view>
+
+    <view style="padding: 20rpx 30rpx 10rpx 30rpx">
+      <view class="line2" wx:if="{{!(yourScore < 0)}}">
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">绩点</text>
+          </view>
+          <text class="value">{{filter.toFix(yourGPA, 1)}}</text>
+        </view>
+        <view class="item{{(predict && yourScore >= 60) ? '' : '_1' }}">
+          <view class="title">
+            <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">得分</text>
+          </view>
+          <text class="value">{{yourScore}}</text>
+        </view>
+        <view class="item_1" wx:if="{{predict && yourScore >= 60}}">
+          <view class="title">
+            <span class="icon-inline icon-surpass"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">超越</text>
+          </view>
+          <text class="value">{{predict}}</text>
+        </view>
+      </view>
+      <view class="line2" wx:else>
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">绩点</text>
+          </view>
+          <text class="value">—</text>
+        </view>
+        <view class="item{{averScore ? '' : '_1'}}">
+          <view class="title">
+            <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">得分</text>
+          </view>
+          <text class="value">—</text>
+        </view>
+        <view class="item_1" wx:if="{{averScore}}">
+          <view class="title">
+            <span class="icon-inline icon-surpass"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">超越</text>
+          </view>
+          <text class="value">—</text>
+        </view>
+      </view>
+      <view style="display: flex">
+        <view class="time" style="flex: 1; {{timestamp > 0 ? 'font-size: 20rpx' : ''}}">分数更新时间：{{my_time}}</view>
+        <view class="time" style="flex: 1; {{timestamp > 0 ? 'font-size: 20rpx' : ''}}" wx:if="{{timestamp > 0}}">统计更新时间：{{time}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:for="{{messages}}" class="message">{{item}}</view>
+
+  <!--  年级分数情况 -->
+  <text class="head" wx:if="{{averScore}}">年级分数情况</text>
+  <view class="distribution" wx:if="{{averScore}}">
+    <view wx:if="{{demo || hidePersonal}}" class="line2" style="margin: 0;">
+      <text class="title"><text wx:if="{{demo}}">演示 - </text>{{className}}</text>
+    </view>
+    <view wx:if="{{!demo}}">
+      <view class="course-type"><text>课程性质：{{filter.join(type_full, ', ')}}</text></view>
+      <view class="course-type">
+        <text class="course-type-flex">开设学院：{{filter.join(academy_full, '\n　')}}</text>
+        <text class="course-type-flex">课程代码：{{filter.join(id_full, ', ')}}</text>
+      </view>
+      <view class="course-type" wx:if="{{majors.length > 0}}"><text>开设专业：{{filter.join(majors, ', ')}}</text></view>
+    </view>
+    <view class="line1">
+      <view class="item">
+        <view class="title">
+          <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+          <text class="icon-inline-text">平均绩点</text>
+        </view>
+        <text class="value">{{filter.toFix(averGPA, 2)}}</text>
+      </view>
+      <view class="item">
+        <view class="title">
+          <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+          <text class="icon-inline-text">平均分</text>
+        </view>
+        <text class="value">{{filter.toFix(averScore, 2)}}</text>
+      </view>
+      <view class="item_1">
+        <view class="title">
+          <span class="icon-inline icon-std"><span class="path1"></span><span class="path2"></span></span>
+          <text class="icon-inline-text">标准差</text>
+        </view>
+        <text class="value">{{filter.toFix(stdDev, 2)}}</text>
+      </view>
+    </view>
+
+    <view class="line1">
+      <view class="item">
+        <view class="title">
+          <span class="icon-inline icon-excellent-rates"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+          <text class="icon-inline-text">优秀率</text>
+        </view>
+        <text class="value">{{filter.toFix(GPAdistribution_A_Rate, 1)}}%</text>
+      </view>
+      <view class="item">
+        <view class="title">
+          <span class="icon-inline icon-pass-rates"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+          <text class="icon-inline-text">及格率</text>
+        </view>
+        <text class="value">{{filter.toFix(GPAdistribution_ABC_Rate, 1)}}%</text>
+      </view>
+      <view class="item_1">
+        <view class="title">
+          <span class="icon-inline icon-highest-score"><span class="path1"></span><span class="path2"></span></span>
+          <text class="icon-inline-text">最高分</text>
+        </view>
+        <text class="value">{{higestScoree}}</text>
+      </view>
+    </view>
+
+    <view class="line2">
+      <text class="title">成绩分布直方图</text>
+    </view>
+
+    <view class="distributionChart" wx:if="{{!halfScreen.show && ifDistribution}}">
+      <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}" ></ec-canvas>
+    </view>
+    <view class="distributionChart_notSshow" wx:if="{{!halfScreen.show && !ifDistribution}}">
+      该课程样本量太少，不予显示分布直方图
+    </view>
+
+    <view class="line3">
+      <view class="item">
+        <view class="title">
+          <text>A (4.0)</text>
+          <view class="preimg"></view>
+        </view>
+        <text class="value">{{GPAdistribution_A}}</text>
+      </view>
+      <view class="item">
+        <view class="title">
+          <text>B (3.0)</text>
+          <view class="preimg"></view>
+        </view>
+        <text class="value">{{GPAdistribution_B}}</text>
+      </view>
+      <view class="item">
+        <view class="title">
+          <text>C (2.0)</text>
+          <view class="preimg"></view>
+        </view>
+        <text class="value">{{GPAdistribution_C}}</text>
+      </view>
+      <view class="item_1">
+        <view class="title">
+          <text>F (0.0)</text>
+          <view class="preimg"></view>
+        </view>
+        <text class="value">{{GPAdistribution_D}}</text>
+      </view>
+    </view>
+
+    <view class="time" wx:if="{{hidePersonal}}">更新时间：{{time}}</view>
+    <view class="time">样本量：{{count}}</view>
+  </view>
+
+  <!--  各学期成绩列表 -->
+  <text class="head" wx:if="{{year_term}}">学期平均成绩</text>
+  <view class="teacher">
+    <view class="weui-cell weui-cell highlight-{{index === filter.shortYear(option.year) + '-' + option.term}}" wx:for="{{year_term}}" wx:key="*this">
+      <view class="weui-cell__bd"><text style="font-size: 90%">{{index}} </text><text class="small">({{item.count}})</text></view>
+      <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 90%">{{filter.toFix(item.gpa/item.count, 2)}} <text class="small diff-{{filter.diffClass(item.gpa/item.count - averGPA, 0.2)}}">({{filter.diff(item.gpa/item.count - averGPA)}})</text><text decode="{{true}}">&nbsp;|&nbsp;{{filter.toFix(item.score/item.count, 2)}} <text class="small diff-{{filter.diffClass(item.score/item.count - averScore, 3)}}">({{filter.diff(item.score/item.count - averScore)}})</text></text>
+      </view>
+    </view>
+  </view>
+
+  <!--  导师平均成绩列表 -->
+  <text class="head" wx:if="{{instructors}}">教师平均成绩</text>
+  <view class="teacher">
+    <view class="weui-cell weui-cell highlight-{{index === option.instructor}}" wx:for="{{instructors}}" wx:key="*this">
+      <view class="weui-cell__bd"><text style="font-size: 28rpx">{{index}} </text><text class="small">({{item.count}})</text></view>
+      <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 28rpx">{{filter.toFix(item.gpa/item.count, 2)}} <text class="small diff-{{filter.diffClass(item.gpa/item.count - averGPA, 0.2)}}">({{filter.diff(item.gpa/item.count - averGPA)}})</text><text decode="{{true}}">&nbsp;|&nbsp;{{filter.toFix(item.score/item.count, 2)}} <text class="small diff-{{filter.diffClass(item.score/item.count - averScore, 3)}}">({{filter.diff(item.score/item.count - averScore)}})</text></text>
+      </view>
+    </view>
+  </view>
+  <mp-halfScreenDialog
+          bindbuttontap="bindHalf"
+          bindclose="bindHalf"
+          show="{{halfScreen.show}}"
+          maskClosable="{{false}}"
+          title="{{halfScreen.title}}"
+          subTitle="{{halfScreen.subtitle}}"
+          desc="{{halfScreen.desc}}"
+          tips="{{halfScreen.tips}}"
+          buttons="{{buttons}}"
+          closabled="{{false}}"
+  ></mp-halfScreenDialog>
+</view>

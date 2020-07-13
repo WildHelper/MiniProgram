@@ -1,0 +1,160 @@
+/// <reference path="../../../typings/index.d.ts" />
+
+const app: IMyApp = getApp()
+
+Page({
+  data: {
+    count: '',
+    password: '',
+    showClearBtn: false,
+    isWaring: false,
+    isLoggedIn: true,
+    url_logo: app.globalData.url_logo,
+  },
+
+  // 登陆表单数据处理-用户名输入框变更
+  onInputCount(evt) {
+    const count = evt.detail.value
+    this.data.count = count
+    this.setData({
+      showClearBtnCount: !!count.length,
+      isWaring: false,
+    })
+
+  },
+  // 登陆表单数据处理-密码输入框变更
+  onInputPassword(evt) {
+    const password = evt.detail.value
+    this.data.password = password
+    this.setData({
+      showClearBtnPassword: !!password.length,
+      isWaring: false,
+    })
+
+  },
+  // 登陆表单数据处理-用户名输入框清空
+  onClearCount() {
+    this.setData({
+      count: '',
+      showClearBtnCount: false,
+      isWaring: false,
+    })
+  },
+  // 登陆表单数据处理-密码输入框清空
+  onClearPassword() {
+    this.setData({
+      password: '',
+      showClearBtnPassword: false,
+      isWaring: false,
+    })
+  },
+
+  // 确定按钮处理
+  onConfirm() {
+    // 用户名格式不正确时，warning效果的判定
+    if (this.data.count.length !== 8) {
+      this.setData({
+        isWaring: true,
+      })
+    }
+
+    // 发送登陆请求
+    wx.showLoading({
+      title: '登录中',
+    })
+    wx.login({
+      success: (res) => {
+        wx.$request<any>({
+          actions: false,
+          methods: 'POST',
+          data: {
+            'no': this.data.count,
+            'pass': this.data.password,
+            'code': res.code,
+          },
+          path: 'login',
+          success: (resp) => {
+            app.globalData.authorization = resp.authorization
+            app.globalData.open = resp.open
+            app.globalData.student_id = resp.student_id
+            if (!this.data.count) {
+              wx.setBackgroundFetchToken({ token: '0' })
+              wx.clearStorageSync()
+              wx.switchTab({
+                url: '/pages/overAllPage/overAllPage',
+              })
+              return
+            }
+            wx.setBackgroundFetchToken({
+              token: app.globalData.authorization,
+              complete: (res: any) => {
+                console.log(res)
+
+                wx.setStorageSync('authorization3', app.globalData.authorization)
+                wx.setStorageSync('open', app.globalData.open)
+                wx.setStorageSync('student_id', app.globalData.student_id)
+
+                // 关闭登陆页面，跳转至分数详情页面
+                wx.switchTab({
+                  url: '/pages/overAllPage/overAllPage',
+                })
+              },
+            })
+          },
+          type: 'any',
+        })
+      },
+    })
+  },
+
+  onLoad: function(options) {
+    if (typeof options !== 'undefined' && typeof options.year !== 'undefined' && typeof options.term !== 'undefined'  && typeof options.courseId !== 'undefined') {
+      app.globalData.redirect = {
+        year: options.year,
+        term: options.term,
+        courseId: options.courseId,
+      }
+    }
+
+    if (app.globalData.student_id && app.globalData.authorization && app.globalData.open) {
+      wx.getBackgroundFetchToken({
+        complete: (res: any) => {
+          if (res.errMsg !== 'getBackgroundFetchToken:ok' || res.token !== app.globalData.authorization) {
+            wx.setBackgroundFetchToken({
+              token: app.globalData.authorization,
+              complete: () => {
+                wx.switchTab({
+                  url: '/pages/overAllPage/overAllPage',
+                })
+              },
+            })
+          } else {
+            wx.switchTab({
+              url: '/pages/overAllPage/overAllPage',
+            })
+          }
+        },
+      })
+    } else {
+      app.globalData.authorization = ''
+      app.globalData.open = ''
+      app.globalData.student_id = ''
+      this.setData( { isLoggedIn: false } )
+    }
+  },
+
+  onShareAppMessage: function() {
+    return {
+      title: '快来查分啦',
+      path: '/pages/login/login',
+    }
+  },
+
+  morePage: function() {
+    wx.navigateTo({
+      url: '/pages/more/more',
+    })
+  },
+})
+
+export {}

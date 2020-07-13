@@ -1,0 +1,167 @@
+.line{
+  width: 100%;    /* 分隔线的长度 */
+  margin: auto;
+  height: 1px;    /* 分隔线粗细 */
+  text-align: center;
+  font-size: 24rpx;
+  color: #aaa;
+  background: #ccc;
+  margin-top: 30rpx;
+  margin-bottom: 5rpx;
+  flex: 1;
+}
+
+.title {
+  flex: 9;
+}
+
+.view-box-btn-hover{
+  background-color: #4D4D4D;
+}
+
+.card {
+  background-color: #0197C2;
+}
+.card view {
+  color: #FFF;
+}
+.page .userInfo {
+  padding: 40rpx 60rpx;
+}
+.card2 {
+  position: relative;
+  height: 60vw;
+  top: -35vw;
+  width: 140vw;
+  background-color: #0197C2;
+  -moz-border-radius: 100vw / 60vw;
+  -webkit-border-radius: 100vw / 60vw;
+  border-radius: 100vw / 60vw;
+  z-index: -1;
+  left: -20vw;  
+}
+.page .userInfo .nameAndPic {
+  display: flex;
+}
+.page .userInfo .nameAndPic .name {
+  flex:2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page .userInfo .nameAndPic .name .welcome {
+  font-size: 24rpx;
+  display: block;
+}
+.page .userInfo .nameAndPic .name .userName {
+  font-size: 50rpx;
+  font-weight:bold;
+  display: inline-block;
+}
+.page .userInfo .nameAndPic .name .expression {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  display: inline-block;
+}
+.page .userInfo .nameAndPic .pic {
+  height: 120rpx;
+  width: 120rpx;
+  border-radius: 60rpx;
+  overflow: hidden;
+}
+
+.page .userInfo .detailInfo .line1 {
+  display: flex;
+}
+.page .userInfo .detailInfo .line2 {
+  display: flex;
+}
+.page .userInfo .detailInfo .infoLeft{
+  font-size: 24rpx;
+  flex: 1;
+}
+.page .userInfo .detailInfo .infoRight{
+  font-size: 24rpx;
+  flex: 1;
+}
+
+
+
+.totalScore {
+  margin: 30rpx 40rpx;
+  padding: 10rpx 30rpx 20rpx 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+}
+.totalScore .line1 {
+  font-size: 40rpx;
+  font-weight:bold;
+  margin: 10rpx 0;
+  display: flex;
+}
+.totalScore .line2 {
+  margin-bottom: 30rpx;
+}
+.totalScore .line3 {
+  display: flex;
+}
+.totalScore .line3 .item {
+  flex: 1;
+  margin-right: 20rpx;
+  border-right: 1rpx solid rgba(204, 204, 204, 0.4);
+}
+.totalScore .line3 .item_1 {
+  flex: 1;
+  margin-right: 20rpx;
+}
+.totalScore .line3 .title {
+  font-size: 25rpx;
+  color: #999999;
+}
+.totalScore .line3 .value {
+  font-size: 50rpx;
+}
+.totalScore .time {
+  font-size: 25rpx;
+  text-align: right;
+  color: var(--weui-FG-2);
+}
+
+.previousAndCETScore {
+  margin: 30rpx 40rpx;
+  padding: 30rpx 30rpx;
+  padding-bottom: 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  font-size: 40rpx;
+  font-weight:bold;
+  display: flex;
+  background-color: #FFF;
+}
+
+.message {
+  margin: 30rpx 40rpx;
+  color: #888888;
+  font-size: 25rpx;
+  text-align: center;
+}
+
+view.page {
+  padding-bottom: 80px;
+}
+view.page.is-single-true {
+  padding-bottom: 30rpx;
+}
+
+@supports (padding-bottom: calc(55px + 50rpx)) {
+  view.page {
+    padding-bottom: calc(55px + 50rpx);
+  }
+}
+
+@supports (padding-bottom: calc(55px + 50rpx + env(safe-area-inset-bottom))) {
+  view.page {
+    padding-bottom: calc(55px + 50rpx + env(safe-area-inset-bottom));
+  }
+}

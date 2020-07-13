@@ -1,0 +1,55 @@
+{
+  "pages":[
+    "pages/login/login",
+    "pages/entireClass/entireClass",
+    "pages/exam/exam",
+    "pages/scoreDetailPage/scoreDetailPage",
+    "pages/overAllPage/overAllPage",
+    "pages/previousScore/previousScore",
+    "pages/scoreList/scoreList",
+    "pages/index/index",
+    "pages/CET/CET",
+    "pages/more/more"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "@navBgColor",
+    "navigationBarTitleText": "野生工大助手",
+    "navigationBarTextStyle":"@navTxtStyle",
+    "backgroundColor": "@bgColor",
+    "backgroundTextStyle": "@bgTxtStyle"
+  },
+  "tabBar": {
+    "custom": true,  
+    "color": "#0197c2",  
+    "selectedColor": "#0197c2",
+    "borderStyle": "black" ,
+    "list": [{  
+        "iconPath":"icon/check-grade.png",
+        "selectedIconPath":"icon/check-grade-selected.png",
+        "pagePath": "pages/overAllPage/overAllPage",  
+        "text": "成绩"
+      }, {  
+        "iconPath":"icon/check-schedule.png",
+        "selectedIconPath":"icon/check-schedule-selected.png",
+        "pagePath": "pages/index/index",  
+        "text": "课表"
+      }, {
+        "iconPath":"icon/check-exam.png",
+        "selectedIconPath":"icon/check-exam-selected.png",
+        "pagePath": "pages/exam/exam",  
+        "text": "考试时间"
+      }, {
+        "iconPath":"icon/check-courses.png",
+        "selectedIconPath":"icon/check-courses-selected.png",
+        "pagePath": "pages/entireClass/entireClass",
+        "text": "选课指导"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "cloud": true,
+  "darkmode": true,
+  "themeLocation": "theme.json"
+}

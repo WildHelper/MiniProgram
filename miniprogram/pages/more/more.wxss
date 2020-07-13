@@ -1,0 +1,73 @@
+.previousAndCETScore {
+  margin: 30rpx 40rpx!important;
+  padding: 30rpx 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  font-size: 40rpx;
+  font-weight:bold;
+  display: flex;
+  background-color: #FFF;
+  width: initial!important;
+  text-align: left!important;
+}
+
+.title {
+  flex: 9;
+}
+
+.message {
+  margin: 30rpx 40rpx;
+  color: #888888;
+  font-size: 25rpx;
+}
+
+.message icon, .message text {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.h1 {
+  font-size: 49rpx;
+}
+
+.h2 {
+  font-size: 45rpx;
+}
+
+.h3 {
+  font-size: 41rpx;
+}
+
+.h4 {
+  font-size: 37rpx;
+}
+
+.h5 {
+  font-size: 33rpx;
+}
+
+.h6 {
+  font-size: 29rpx;
+}
+
+.list {
+  margin: 0 40rpx 0 80rpx;
+  list-style-type: disc;
+  display: list-item;
+}
+
+.numbered-list {
+  margin: 0 40rpx 0 80rpx;
+  list-style-type: decimal;
+  display: list-item;
+}
+
+.weui-msg__icon-area {
+  margin-bottom: 16px!important;
+}
+.weui-msg__text-area {
+  margin-bottom: 0!important;
+}
+.weui-msg__tips-area, .weui-msg__extra-area {
+  display: none!important;
+}

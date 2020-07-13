@@ -1,0 +1,63 @@
+.info {
+  color: #888888;
+  text-align: center;
+  margin: 30rpx 40rpx;
+  background-color: #FFF;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+}
+
+.classes {
+  margin: 30rpx 40rpx;
+  background-color: #FFF;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+}
+.classes .line1{
+  display: flex;
+  margin-bottom: 30rpx;
+}
+.classes .line1 .name{
+  font-size: 35rpx;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  width: 60vw;
+}
+.classes .line1 .isOver{
+  margin-top: auto;
+  font-size: 25rpx;
+  color: red;
+}
+.classes .line2{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+}
+.classes .line2 .item {
+  flex: 1;
+  color: #888888;
+}
+view.page {
+  padding-bottom: 80px;
+}
+
+@supports (padding-bottom: calc(55px + 50rpx)) {
+  view.page {
+    padding-bottom: calc(55px + 50rpx);
+  }
+}
+
+@supports (padding-bottom: calc(55px + 50rpx + env(safe-area-inset-bottom))) {
+  view.page {
+    padding-bottom: calc(55px + 50rpx + env(safe-area-inset-bottom));
+  }
+}
+
+.message {
+  margin: 30rpx 40rpx;
+  color: #888888;
+  font-size: 25rpx;
+  text-align: center;
+}

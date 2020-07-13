@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "mp-halfScreenDialog": "/miniprogram_npm/weui-miniprogram/half-screen-dialog/half-screen-dialog"
+  },
+  "navigationBarTitleText": "成绩详情 - 工大助手",
+  "enablePullDownRefresh": true
+}

@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+/miniprogram/miniprogram_npm
+/miniprogram/pages/*/*.js
+/miniprogram/app.js
+/miniprogram/ec-canvas/echarts.js
+package-lock.json

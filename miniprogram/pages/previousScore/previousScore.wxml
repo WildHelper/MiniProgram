@@ -1,0 +1,43 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+
+<view class="page">
+
+  <!--  各个学期成绩 -->
+  <view wx:for="{{term}}" wx:key="name" class="totalScore" bindtap="bindtapHandeler" data-year="{{item.year}}" data-term="{{item.term}}" data-from="term">
+    <view class="line1">
+      <text class="title red-{{item.unread > 0 || (item.ungraded > 0 && !share_score)}} unsubscribed-{{item.unsubscribed > 0}}">{{filter.startYear(item.year, item.term, first_semester)}}</text>
+      <view class='arrow'></view>
+    </view>
+
+    <view class="line2">
+      <text class="subTitle pass-{{(item.detail.passRate >= 100 ? 1 : 0) + (item.detail.passRate >= 70 ? 1 : 0) + (item.detail.passRate >= 50 ? 1 : 0)}}" wx:if="{{item.detail.count > 0}}">通过率：{{filter.toFix(item.detail.passRate, 0)}}%</text>
+      <text class="subTitle">学分：<text wx:if="{{item.detail.passCredits < item.detail.totalCredit}}">{{item.detail.passCredits}}/</text>{{item.detail.totalCredit}}</text>
+    </view>
+
+    <view class="line3">
+      <view class="item">
+        <view class="title">
+          <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+          <text class="icon-inline-text">GPA</text>
+        </view>
+        <text class="value" wx:if="{{item.detail.score > 0}}">{{filter.toFix(item.detail.gpa, 2)}}</text>
+        <text class="value" wx:else>—</text>
+      </view>
+      <view class="item">
+        <view class="title">
+          <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+          <text class="icon-inline-text">加权平均分</text>
+        </view>
+        <text class="value" wx:if="{{item.detail.score > 0}}">{{filter.toFix(item.detail.score, 2)}}</text>
+        <text class="value" wx:else>—</text>
+      </view>
+      <view class="item_1">
+        <view class="title">
+          <span class="icon-inline icon-courses-qty"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+          <text class="icon-inline-text">已出课程数</text>
+        </view>
+        <text class="value">{{item.detail.count}}<text style="font-size: 35rpx" wx:if="{{item.ungraded > 0}}">/{{item.detail.count+item.ungraded}}</text></text>
+      </view>
+    </view>
+  </view>
+</view>

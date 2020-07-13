@@ -1,0 +1,102 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+<view class="page" style="margin-top: 2rem">
+  <view wx:if="{{logged_in}}" style="margin-bottom: 1rem">
+    <view wx:if="{{is_no_password}}" class="message" style="display: flex">
+      <icon style="flex: 1" class="icon-box-img" type="{{status_messages['is_no_password']['type']}}" size="64rpx"></icon>
+      <text style="flex: 8">{{status_messages['is_no_password']['desc']}}</text>
+    </view>
+    <view wx:elif="{{!share_score}}">
+      <mp-msg type="{{status_messages['share']['type']}}" title="{{status_messages['share']['title']}}" ext-class="background-transparent">
+        <view slot="desc">{{status_messages['share']['desc']}}</view>
+        <view slot="handle">
+          <button class="weui-btn" type="primary" bindtap="optIn" data-from="reload">{{status_messages['share']['button']}}</button>
+        </view>
+      </mp-msg>
+    </view>
+    <view wx:elif="{{open_status === 1}}" class="message" style="display: flex">
+      <icon style="flex: 1" class="icon-box-img" type="{{status_messages['1']['type']}}" size="64rpx"></icon>
+      <text style="flex: 8">{{status_messages['1']['desc']}}</text>
+    </view>
+    <view wx:elif="{{open_status === 2}}">
+      <view class="message" style="display: flex">
+        <icon style="flex: 1" class="icon-box-img" type="{{status_messages['2']['type']}}" size="64rpx"></icon>
+        <text style="flex: 8">{{status_messages['2']['desc']}}</text>
+      </view>
+      <view style="margin-bottom: 2rem">
+        <button type="warn" wx:if="{{!is_no_password}}" bindtap="resetSubscribe" data-from="reload">{{status_messages['2']['button']}}</button>
+      </view>
+    </view>
+    <view wx:elif="{{open_status === 0}}">
+      <mp-msg type="{{status_messages['0']['type']}}" title="{{status_messages['0']['title']}}" ext-class="background-transparent">
+        <view slot="desc">{{status_messages['0']['desc']}}</view>
+        <view slot="handle">
+          <button type="primary" wx:if="{{!is_no_password}}" bindtap="connectAccount" data-from="reload">{{status_messages['0']['button']}}</button>
+        </view>
+      </mp-msg>
+    </view>
+    <view wx:elif="{{finished}}">
+      <view class="message" style="display: flex">
+        <icon style="flex: 1" class="icon-box-img" type="{{status_messages['default']['type']}}" size="64rpx"></icon>
+        <text style="flex: 8">{{status_messages['default']['desc']}}</text>
+      </view>
+      <view style="margin-bottom: 2rem">
+        <button bindtap="cancelNoWarning" type="warn">退出登录</button>
+      </view>
+    </view>
+
+    <!-- CET4成绩 -->
+    <view wx:if="{{switches.cet}}" class="previousAndCETScore" bindtap="bindtapHandeler" data-from="CET">
+      <text class="title">四六级成绩</text>
+      <view class='arrow'></view>
+    </view>
+
+    <!--全校成绩-->
+    <view wx:if="{{!show_courses && !is_no_password}}" class="previousAndCETScore" bindtap="bindtapHandeler" data-from="entireClass">
+      <text class="title">选课指导</text>
+      <view class='arrow'></view>
+    </view>
+
+    <view wx:if="{{!show_exam && !is_no_password}}" class="previousAndCETScore" bindtap="bindtapHandeler" data-from="exam">
+      <text class="title">考试时间</text>
+      <view class='arrow'></view>
+    </view>
+  </view>
+  <view wx:elif="{{status_messages['demo']}}">
+    <view>
+      <button bindtap="demo" type="default">{{status_messages['demo']['button']}}</button>
+    </view>
+  </view>
+
+  <view wx:for="{{messages}}" class="message {{filter.addHeading(item, 'class')}}">{{filter.addHeading(item, 'text')}}</view>
+
+  <button open-type="openSetting" class="previousAndCETScore">
+    <text class="title">通知设置</text>
+    <view class='arrow'></view>
+  </button>
+
+  <button open-type="feedback" class="previousAndCETScore">
+    <text class="title">意见反馈</text>
+    <view class='arrow'></view>
+  </button>
+
+  <view wx:for="{{footer}}" class="message {{filter.addHeading(item, 'class')}}">{{filter.addHeading(item, 'text')}}</view>
+
+  <view wx:if="{{logged_in && finished}}">
+    <!--取消共享按钮-->
+    <view wx:if="{{share_score && !is_no_password}}" style="margin: 1rem 0">
+      <button bindtap="optOut" type="warn">撤销授权</button>
+    </view>
+
+    <view wx:if="{{share_score && !is_no_password}}" style="margin: 1rem 0">
+      <button type="warn" bindtap="resetSubscribe" data-from="reload">{{status_messages['2']['button']}}</button>
+    </view>
+
+    <!--取消记忆按钮-->
+    <view style="margin: 1rem 0">
+      <button bindtap="cancel" type="warn">退出登录</button>
+    </view>
+  </view>
+
+  <mp-actionSheet bindactiontap="btnClick" show="{{showActionsheet}}" actions="{{groups}}" title="{{actionSheetTitle}}">
+  </mp-actionSheet>
+</view>

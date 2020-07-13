@@ -1,0 +1,25 @@
+<view class="page">
+  <!-- 课程列表 -->
+  <view class="info" wx:if="{{isNull}}">
+    暂无考试信息
+  </view>
+  <view wx:for="{{messages}}" wx:key="*this" class="message">{{item}}</view>
+  <view class="classes" wx:if="{{!isNull}}">
+    <!-- <navigator wx:for="{{classes_show}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active" bindtap="bindtapHandeler" data-id='{{item.id}}' data-gpa='{{item.gpa}}' data-score='{{item.score}}'> -->
+    <view wx:for="{{examList}}" wx:key="courseName" class="weui-cell weui-cell">
+      <view class="weui-cell__bd">
+        <view class="line1">
+          <view class="name">{{item.courseName}}</view>
+          <view class="isOver" wx:if="{{isOver[index]}}"> 已结束 </view>
+        </view>
+
+        <view class="line2">
+          <view class="item">考试日期：{{item.time}}</view>
+          <view class="item">考试地点：{{item.room}}</view>
+          <view class="item">考场校区：{{item.campus}}</view>
+        </view>
+
+      </view>
+    </view>
+  </view>
+</view>

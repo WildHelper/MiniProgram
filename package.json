@@ -1,0 +1,28 @@
+{
+  "name": "bjut-helper-mini-program",
+  "version": "1.0.0",
+  "description": "野生工大助手小程序",
+  "main": "app.js",
+  "dependencies": {
+    "miniprogram-api-typings": "^2.11.0-1",
+    "weui-miniprogram": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZE3kr/BJUT-Helper-Mini-Program.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZE3kr/BJUT-Helper-Mini-Program/issues"
+  },
+  "homepage": "https://github.com/ZE3kr/BJUT-Helper-Mini-Program#readme"
+}

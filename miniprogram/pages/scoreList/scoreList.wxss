@@ -1,0 +1,170 @@
+.line{
+  width: 100%;    /* 分隔线的长度 */
+  margin: auto;
+  height: 1px;    /* 分隔线粗细 */
+  text-align: center;
+  font-size: 24rpx;
+  color: #aaa;
+  background: #ccc;
+  margin-top: 30rpx;
+  margin-bottom: 5rpx;
+  flex: 1;
+}
+.arrow{
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #999;
+  border-right: 2px solid #999;
+
+  right: 20rpx;
+  transform: rotate(45deg);
+  margin-top:20rpx;
+}
+.title {
+  flex: 9;
+}
+
+.search{
+  margin: 30rpx 40rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+  display: flex;
+}
+.search .input {
+  flex: 7;
+  margin: auto 0;
+}
+.search .searchConfirm {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.title {
+  display: flex;
+}
+.sort {
+  font-size: 25rpx;
+}
+
+.totalScore {
+  overflow: hidden;
+  margin: 30rpx 40rpx;
+  padding-bottom: 10rpx;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+}
+
+.totalScore .line1 {
+  font-size: 40rpx;
+  padding: 30rpx 30rpx 10rpx 30rpx;
+  background-color: #0197C2;
+  color: #FFF;
+  display: flex;
+}
+.totalScore .line2 {
+  margin-bottom: 30rpx;
+}
+.totalScore .line3 {
+  display: flex;
+}
+.totalScore .line3 .item {
+  flex: 1;
+  margin-right: 20rpx;
+  border-right: 1rpx solid rgba(204, 204, 204, 0.4);
+}
+.totalScore .line3 .item_1 {
+  flex: 1;
+  margin-right: 20rpx;
+}
+.totalScore .line3 .title {
+  font-size: 25rpx;
+  color: #999999;
+}
+.totalScore .line3 .value {
+  font-size: 50rpx;
+}
+.totalScore .time {
+  font-size: 25rpx;
+  text-align: right;
+  color: var(--weui-FG-2);
+  flex: 1;
+}
+
+.search{
+  margin: 30rpx 40rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+}
+
+.sortDisplay {
+  display: flex;
+  margin: 30rpx 40rpx;
+}
+.sortDisplay view {
+  color: #5e5e5e;
+}
+.typeSet {
+  margin: 30rpx 40rpx;
+}
+.typeSet .title {
+  font-size: 25rpx;
+  color: #B2B2B2;
+}
+.scores {
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+  padding: 0 30rpx;
+  margin-top: 5rpx;
+  border-radius: 10rpx;
+}
+  
+.weui-cell {
+  padding: 18rpx 0;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.weui-cell:before {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px solid var(--weui-FG-3);
+  color: var(--weui-FG-3);
+  transform-origin: 0 0;
+  transform: scaleY(.5);
+  z-index: 2;
+}
+.course-title {
+  font-size: 90%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100vw - 360rpx);
+}
+.course-desc {
+  font-size: 60%;
+  display: block;
+  color: #999999;
+}
+@media (prefers-color-scheme: dark) {
+  .totalScore .line1 {
+    background-color: #143F54 !important;
+  }
+}
+.message {
+  margin: 30rpx 40rpx;
+  color: #888888;
+  font-size: 25rpx;
+  text-align: center;
+}

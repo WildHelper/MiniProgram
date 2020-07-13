@@ -1,0 +1,207 @@
+<view class="page is-single-{{sceneId === 1154}}">
+  <wxs module="filter" src="../../utils/filter.wxs"></wxs>
+
+  <view wx:if="{{ success === 1 }}">
+    <!-- 个人信息区 -->
+    <view class="card" wx:if="{{name}}">
+      <view class="userInfo">
+        <view class="nameAndPic">
+          <view class="name">
+            <text class="welcome">欢迎回来！</text>
+            <open-data class="userName" type="userNickName"></open-data>
+<!--            <text class="expression">苟利国家生死以 岂因祸福避驱之</text>-->
+          </view>
+          <view class="pic">
+            <open-data class="head_name-img" type="userAvatarUrl"></open-data>
+          </view>
+        </view>
+
+        <view class="line"></view>
+        <view class="detailInfo" style="position: absolute; width: calc(100vw - 120rpx)">
+          <view class="line1">
+            <text class="infoLeft">学号：{{sid}}</text>
+            <text class="infoRight">学院：{{institute}}</text>
+          </view>
+          <view class="line2">
+            <text class="infoLeft">姓名：{{name}}</text>
+            <text class="infoRight">专业：{{major}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view style="position: absolute; width: 100vw; overflow: hidden; pointer-events: none;" wx:if="{{name}}">
+      <view class="card2"></view>
+    </view>
+
+    <view style="height: 5vw; z-index: -1; pointer-events: none;" wx:if="{{name}}"></view>
+
+    <!--  各个学期成绩 -->
+    <view wx:for="{{term}}" wx:key="name" class="totalScore" bindtap="bindtapHandeler" data-year="{{item.year}}" data-term="{{item.term}}" data-from="term">
+      <view class="line1">
+        <text class="title red-{{item.unread > 0 || (!is_no_password && item.ungraded > 0 && !share_score)}} unsubscribed-{{!is_no_password && item.unsubscribed > 0}}">{{filter.startYear(item.year, item.term, first_semester)}}</text>
+        <view class='arrow'></view>
+      </view>
+
+      <view class="line2">
+        <text class="subTitle pass-{{(item.detail.passRate >= 100 ? 1 : 0) + (item.detail.passRate >= 70 ? 1 : 0) + (item.detail.passRate >= 50 ? 1 : 0)}}" wx:if="{{item.detail.count > 0}}">通过率：{{filter.toFix(item.detail.passRate, 0)}}%</text>
+        <text class="subTitle">学分：<text wx:if="{{item.detail.passCredits < item.detail.totalCredit}}">{{item.detail.passCredits}}/</text>{{item.detail.totalCredit}}</text>
+      </view>
+
+      <view class="line3">
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">GPA</text>
+          </view>
+          <text class="value" wx:if="{{item.detail.score > 0}}">{{filter.toFix(item.detail.gpa, 2)}}</text>
+          <text class="value" wx:else>—</text>
+        </view>
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">加权平均分</text>
+          </view>
+          <text class="value" wx:if="{{item.detail.score > 0}}">{{filter.toFix(item.detail.score, 2)}}</text>
+          <text class="value" wx:else>—</text>
+        </view>
+        <view class="item_1">
+          <view class="title">
+            <span class="icon-inline icon-courses-qty"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+            <text class="icon-inline-text">已出课程数</text>
+          </view>
+          <text class="value">{{item.detail.count}}<text style="font-size: 35rpx" wx:if="{{item.ungraded > 0}}">/{{item.detail.count+item.ungraded}}</text></text>
+        </view>
+      </view>
+
+
+      <view style="display: flex;">
+        <view class="time" wx:if="{{index === 0}}" style="flex: 1;{{(index === 0 && item.detail.count === 0) ? 'font-size: 20rpx' : ''}}">分数更新时间：{{time}}</view>
+        <view class="time" wx:if="{{item.detail.count === 0}}"  style="flex: 1;{{(index === 0 && item.detail.count === 0) ? 'font-size: 20rpx' : ''}}">选课更新时间：{{item.course_time}}</view>
+      </view>
+
+    </view>
+
+    <!-- 总成绩 -->
+    <view class="totalScore" bindtap="bindtapHandeler" data-from="total" wx:if="{{name && termNums > 0}}">
+      <view class="line1">
+        <text class="title" wx:if="{{minorNums+minorUngraded > 0}}">第一学位成绩</text>
+        <text class="title" wx:else>总成绩</text>
+        <view class='arrow'></view>
+      </view>
+
+      <view class="line2">
+        <text class="subTitle pass-{{(passRate_total >= 100 ? 1 : 0) + (passRate_total >= 70 ? 1 : 0) + (passRate_total >= 50 ? 1 : 0)}}" wx:if="{{totalNums > 0}}" >通过率：{{filter.toFix(passRate_total, 0)}}%</text>
+        <text class="subTitle">学分：<text wx:if="{{passCredit_total < totalCredit_total}}">{{passCredit_total}}/</text>{{totalCredit_total}}</text>
+      </view>
+
+      <view class="line3">
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">GPA</text>
+          </view>
+          <text class="value" wx:if="{{totalScore > 0}}">{{filter.toFix(totalGPA, 2)}}</text>
+          <text class="value" wx:else>—</text>
+        </view>
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">加权平均分</text>
+          </view>
+          <text class="value" wx:if="{{totalScore > 0}}">{{filter.toFix(totalScore, 2)}}</text>
+          <text class="value" wx:else>—</text>
+        </view>
+        <view class="item_1">
+          <view class="title">
+            <span class="icon-inline icon-courses-qty"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+            <text class="icon-inline-text">已出课程数</text>
+          </view>
+          <text class="value">{{totalNums}}<text style="font-size: 35rpx" wx:if="{{totalUngraded > 0}}">/{{totalUngraded+totalNums}}</text></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 辅修成绩 -->
+    <view class="totalScore" bindtap="bindtapHandeler" data-from="minor" wx:if="{{name && minorNums+minorUngraded > 0}}">
+      <view class="line1">
+        <text class="title">辅修/双学位成绩</text>
+        <view class='arrow'></view>
+      </view>
+
+      <view class="line2">
+        <text class="subTitle pass-{{(passRate_minor >= 100 ? 1 : 0) + (passRate_minor >= 70 ? 1 : 0) + (passRate_minor >= 50 ? 1 : 0)}}">通过率：{{filter.toFix(passRate_minor, 0)}}%</text>
+        <text class="subTitle">学分：<text wx:if="{{passCredit_minor < totalCredit_minor}}">{{passCredit_minor}}/</text>{{totalCredit_minor}}</text>
+      </view>
+
+      <view class="line3">
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-gpa"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">GPA</text>
+          </view>
+          <text class="value" wx:if="{{minorScore > 0}}">{{filter.toFix(minorGPA, 2)}}</text>
+          <text class="value" wx:else>—</text>
+        </view>
+        <view class="item">
+          <view class="title">
+            <span class="icon-inline icon-weighted-rank-wr"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span></span>
+            <text class="icon-inline-text">加权平均分</text>
+          </view>
+          <text class="value" wx:if="{{minorScore > 0}}">{{filter.toFix(minorScore, 2)}}</text>
+          <text class="value" wx:else>—</text>
+        </view>
+        <view class="item_1">
+          <view class="title">
+            <span class="icon-inline icon-courses-qty"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+            <text class="icon-inline-text">已出课程数</text>
+          </view>
+          <text class="value">{{minorNums}}<text style="font-size: 35rpx" wx:if="{{minorUngraded > 0}}">/{{minorNums+minorUngraded}}</text></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 历史成绩 -->
+    <view class="previousAndCETScore" bindtap="bindtapHandeler" data-from="history" wx:if="{{name && termNums > 0}}">
+      <text class="title">各学期成绩</text>
+      <view class='arrow'></view>
+    </view>
+
+    <!-- 更多 -->
+    <view class="previousAndCETScore" bindtap="bindtapHandeler" data-from="more">
+      <text class="title red-{{!is_no_password && (!share_score || !has_open)}}">设置/关于</text>
+      <view class='arrow'></view>
+    </view>
+
+    <view wx:for="{{messages}}" wx:key="*this" class="message">{{item}}</view>
+
+    <view class="message">点击右上角 … 进行分享，分享此页不会分享分数</view>
+
+  </view>
+  <view wx:elif="{{success === 0}}" style="padding-top: 60rpx">
+    <view class="page__bd">
+      <mp-loading type="circle" tips="正在载入成绩…"></mp-loading>
+    </view>
+    <button style="margin-top: 1rem" class="weui-btn" type="default" bindtap="bindtapHandeler" data-from="more">设置/关于</button>
+  </view>
+  <view wx:elif="{{success === 2}}" style="padding-top: 60rpx">
+    <mp-msg type="info" title="尚无成绩" ext-class="background-transparent">
+      <view slot="desc">可能是教务分数接口目前不可用，请稍后再试</view>
+      <view slot="handle">
+        <button class="weui-btn" type="primary" bindtap="bindtapHandeler" data-from="reload">刷新</button>
+        <button class="weui-btn" type="default" bindtap="bindtapHandeler" data-from="more">设置/关于</button>
+      </view>
+      <view slot="footer">
+        <view class="weui-footer__text">Copyright © 野生工大助手</view>
+      </view>
+    </mp-msg>
+  </view>
+  <view wx:elif="{{success === 3}}" style="padding-top: 60rpx">
+    <mp-msg type="info" title="需要登录" ext-class="background-transparent">
+      <view slot="desc">本小程序支持查分、查课表、查考试、出分提醒，专供北工大在校生和已毕业校友使用，点击页面底部 “前往小程序” 登录</view>
+      <view slot="footer">
+        <view class="weui-footer__text">Copyright © 野生工大助手</view>
+      </view>
+    </mp-msg>
+  </view>
+</view>

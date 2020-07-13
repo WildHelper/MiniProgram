@@ -1,0 +1,140 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+<!--<view>-->
+<!--  <canvas class="watermark-canvas" canvas-id="waterMarkCanvas"></canvas>-->
+<!--</view>-->
+
+<view class="page">
+  <view class="watermark" style='background-image: url({{backgroundImg}});'></view>
+  <!-- 搜索框 -->
+  <view class="search" hidden="{{false}}">
+    <view class="input">
+      <view class="weui-cell__bd weui-flex">
+        <input
+            class="weui-input"
+            type="text"
+            placeholder="输入课程名称"
+            placeholder-class="weui-input__placeholder"
+            value="{{searchKey}}"
+            bindinput="onInput"
+        />
+        <view wx:if="{{showClearBtn}}" class="weui-btn_reset weui-btn_icon weui-btn_input-clear" bindtap="onClearCount">
+          <i class="weui-icon-clear"></i>
+        </view>
+      </view>
+    </view>
+
+    <!-- <button class="searchConfirm" type="default" bindtap="search">搜索</button> -->
+  </view>
+
+  <!-- 课程类型筛选 -->
+  <view class="paging">
+    <checkbox-group bindchange="bindMajor" style="margin-left:auto;margin-right:auto;color:#5e5e5e;">
+      <label class="checkbox" style="margin-right:1.5rem">
+        <checkbox value="majorOnly" checked="{{checked}}"/>仅专业课
+      </label>
+      <label class="checkbox">
+        <checkbox value="elective" checked="{{checkedElective}}"/>仅公选课
+      </label>
+    </checkbox-group>
+  </view>
+  <view class="paging">
+    <button class="select" type="default">
+      <picker bindchange="bindTypeChange" range="{{types}}">
+          <view>{{curType}}</view>
+      </picker>
+    </button>
+    <button class="select" type="default">
+      <picker bindchange="bindAcademyChange" range="{{academys}}">
+          <view>{{curAcademy}}</view>
+      </picker>
+    </button>
+  </view>
+
+  <!-- 各排序 -->
+  <view class="sort" hidden="{{false}}">
+    <view class="item" bindtap="sort" data-poperty="count">
+      <span class="icon-inline icon-descending-sort"></span>
+      <text class="icon-inline-text">样本量</text>
+    </view>
+    <view class="item" bindtap="sort" data-poperty="avg">
+      <span class="icon-inline icon-descending-sort"></span>
+      <text class="icon-inline-text">成绩</text>
+    </view>
+    <view class="item" bindtap="sort" data-poperty="gpa">
+      <span class="icon-inline icon-descending-sort"></span>
+      <text class="icon-inline-text">绩点</text>
+    </view>
+    <view class="item" bindtap="sort" data-poperty="excellentRate">
+      <span class="icon-inline icon-descending-sort"></span>
+      <text class="icon-inline-text">优秀率</text>
+    </view>
+    <view class="item" bindtap="sort" data-poperty="passRate">
+      <span class="icon-inline icon-descending-sort"></span>
+      <text class="icon-inline-text">及格率</text>
+    </view>
+  </view>
+
+  <!-- 信息提示 -->
+  <view wx:for="{{messages}}" wx:key="*this" class="message">{{item}}</view>
+  <!-- 课程列表 -->
+  <view class="classes">
+    <!-- <navigator wx:for="{{classes_show}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active" bindtap="bindtapHandeler" data-id='{{item.id}}' data-gpa='{{item.gpa}}' data-score='{{item.score}}'> -->
+    <view wx:for="{{classes_show}}" wx:key="id" class="weui-cell weui-cell_access" hover-class="weui-cell_active" bindtap="JumpHandeler" data-id="{{item.id}}">
+      <view class="weui-cell__bd">
+        <view class="line1">
+          <view class="name">{{item.name}}</view>
+          <view class="sampleSize">样本量：{{item.count}}</view>
+        </view>
+
+        <view class="line2">
+          <view class="item" style="flex: 6;">
+            <text class="value" wx:if="{{filter.isNum(item.A)}}">{{filter.toFix((item.A*4+item.B*3+item.C*2)/(item.count), 2)}} | {{filter.toFix(item.avg, 2)}}</text>
+            <text class="value" wx:else>{{item.A}} | {{filter.toFix(item.avg, 2)}}</text>
+          </view>
+          <view class="item" style="flex: 5">
+            <text class="value" wx:if="{{filter.isNum(item.A)}}"><text style="font-size: 80%">优</text> {{filter.toFix(item.A/(item.count)*100, 1)}}%</text>
+            <text class="value" wx:else><text style="font-size: 80%">优</text> {{item.A}}</text>
+          </view>
+          <view class="item" style="flex: 5">
+            <text class="value" wx:if="{{filter.isNum(item.A)}}"><text style="font-size: 80%">过</text> {{filter.toFix((item.A+item.B+item.C)/(item.count)*100, 1)}}%</text>
+            <text class="value" wx:else><text style="font-size: 80%">过</text> {{item.F}}</text>
+          </view>
+          <view class="arrow"></view>
+        </view>
+
+        <view class="line3">
+          <text class="content">课程性质：{{filter.join(item.type_full, ', ')}}</text>
+        </view>
+
+        <view class="line4">
+          <text class="content">开设学院：{{filter.join(item.academy_full, '\n　')}}</text>
+          <text class="content">课程代码：{{filter.join(item.id_full, ', ')}}</text>
+        </view>
+
+      </view>
+    </view>
+  </view>
+
+  <!-- 没有结果 -->
+  <view wx:if="{{count==0}}">
+    <mp-msg type="info" title="没有搜索结果" ext-class="background-transparent">
+      <view slot="desc">请尝试其他匹配条件</view>
+    </mp-msg>
+  </view>
+
+  <!-- 课程列表内容数量 -->
+  <view class="count">显示第{{startIndex}}至{{endIndex}}项结果 共{{count}}项</view>
+
+  <!-- 课程分页 -->
+  <view class="paging">
+    <button class="up" bindtap="pagingHandeler" data-d="up">{{'<'}}</button>
+
+    <button class="select" >
+      <picker bindchange="bindPageChange" range="{{pages}}">
+          <view>第 {{pages[curPage]}} 页</view>
+      </picker>
+    </button>
+
+    <button class="down" bindtap="pagingHandeler" data-d="down">{{'>'}}</button>
+  </view>
+</view>

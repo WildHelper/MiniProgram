@@ -1,0 +1,61 @@
+<wxs module="filter" src="../../utils/filter.wxs"></wxs>
+
+<!--index.wxml-->
+<view class="page is-single-{{sceneId === 1154}}">
+    <view wx:if="{{comment}}" class="message"><text>{{comment}}</text></view>
+    <block wx:if="{{finished}}">
+        <block wx:if="{{allClasses > noTime.length}}">
+            <scroll-view scroll-x class="container">
+                <view class="timeTable" style="width:133.333333vw">
+                    <view class="date">
+                        <!--      <view class="s"> </view>-->
+                        <!--                <button open-type="share" style="font-size:30rpx;width:15vw;padding:0;border-radius:0;" class="s" size="mini">分享</button>-->
+                        <view style="font-size:30rpx;width:15vw;padding:0;border-radius:0;" class="s"> </view>
+                        <view class="dateItem">周一</view>
+                        <view class="dateItem">周二</view>
+                        <view class="dateItem">周三</view>
+                        <view class="dateItem">周四</view>
+                        <view class="dateItem">周五</view>
+                        <view class="dateItem">周六</view>
+                        <view class="dateItem">周日</view>
+                    </view>
+                    <view class="class">
+                        <view class="time classCol classCol{{index}}" wx:for="{{classes}}" wx:for-index="time" >
+                            <view class="classItem classItem{{index}} opacity-{{item.opacity}}" wx:for="{{item}}" style="background-color:{{color[time][index]}};height: 250rpx">
+                                <scroll-view scroll-y="{{index>0}}" style="height: 250rpx">
+                                    <view class="content" style="padding-bottom: 0.5rem">
+                                        <text wx:if="{{index==0 && (time=='1,2节'||time=='3,4节')}}">上午\n</text>
+                                        <text wx:elif="{{index==0 && (time=='5,6节'||time=='7,8节')}}">下午\n</text>
+                                        <text wx:elif="{{index==0 && (time=='9,10节'||time=='11,12节')}}">晚上\n</text>
+                                        <text wx:if="{{item.text}}">{{item.text}}</text>
+                                        <text wx:else>{{item}}</text>
+                                    </view>
+                                </scroll-view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </scroll-view>
+            <view wx:if="{{message}}" class="message"><text>{{message}}</text></view>
+        </block>
+    </block>
+    <view class="typeSet" wx:if="{{noTime && noTime.length > 0}}">
+        <view class="title"><text>无上课时间课程</text></view>
+        <view class="scores">
+            <view class="weui-cell" wx:for="{{noTime}}">
+                <view class="weui-cell__bd"><text class="course-title">{{item.name}}</text><text class="course-desc">{{item.credit}} | {{item.type}} | {{item.instructor}}</text></view>
+                <view class="weui-cell__ft">{{item.hours}}</view>
+            </view>
+        </view>
+    </view>
+    <block wx:if="{{allClasses <= noTime.length}}">
+        <view wx:if="{{message}}" class="message"><text>{{message}}</text></view>
+    </block>
+    <button wx:if="{{!comment && semesters && semesters.length > 1}}" class="select" type="default" style="margin: 1.5rem auto">
+        <picker bindchange="bindSemesterChange" range="{{semesters}}">
+            <view>{{semester}}</view>
+        </picker>
+    </button>
+    <view class="message">点击右上角 … 进行分享后好友可看到您当前学期课表</view>
+    <view wx:for="{{messages}}" wx:key="*this" class="message">{{item}}</view>
+</view>

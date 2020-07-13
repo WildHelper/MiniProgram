@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "mp-msg": "/miniprogram_npm/weui-miniprogram/msg/msg"
+  },
+  "navigationBarTitleText": "选课指导",
+  "enablePullDownRefresh": true
+}
