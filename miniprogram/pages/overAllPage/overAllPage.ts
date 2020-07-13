@@ -87,7 +87,6 @@ Page({
         app.globalData.scoreData = score
         this.setData({messages: score.messages, time: wx.$formatDate(score.result.time), course_time: wx.$formatDate(app.globalData.scoreData.result.course_time)})
         this.scoreSparser(score.result)
-        this.timeoutId = setTimeout(this.setBackgroundFetch, 0)
         // 不是基础库 2.12.0，直接再发一次请求
         if (!wx.canIUse('updateWeChatApp')) {
           this.time = +new Date() / 1000
@@ -98,7 +97,7 @@ Page({
             icon: 'loading',
             duration: 3000,
           })
-          setTimeout(() => {
+          this.timeoutId = setTimeout(() => {
             if (typeof this.request === 'undefined') {
               wx.showToast({
                 title: '重试中',
@@ -109,6 +108,7 @@ Page({
             }
           }, 3000)
         }
+        this.setBackgroundFetch()
       } else {
         this.time = +new Date() / 1000
         this.fetchData()
@@ -147,7 +147,6 @@ Page({
   },
 
   parseFetchData: function(res: IFetchCallback) {
-    let retry = true
     if (res && (res.errMsg === 'getBackgroundFetchData:ok' || res.errMsg === 'onBackgroundFetchData:ok')) {
       const {fetchedData} = res
       let parsedData: IApi<{score: ITerms}>
@@ -155,8 +154,8 @@ Page({
         parsedData = JSON.parse(fetchedData)
       }
       if (
-        wx.$validateTypeResp(parsedData, 'any') && typeof parsedData.result.score !== 'undefined'
-        && parsedData.result.score && wx.$validateType(parsedData.result.score, 'term')
+          wx.$validateTypeResp(parsedData, 'any') && typeof parsedData.result.score !== 'undefined'
+          && parsedData.result.score && wx.$validateType(parsedData.result.score, 'term')
       ) {
         this.time = parsedData.result.score.updated_time
         app.globalData.scoreData = {
@@ -168,9 +167,6 @@ Page({
         this.setData({messages: parsedData.messages, time: wx.$formatDate(parsedData.result.score.time), course_time: wx.$formatDate(app.globalData.scoreData.result.course_time)})
         this.scoreSparser(parsedData.result.score)
         if (this.time < parsedData.result.score.updated_time) {
-          if (parsedData.result.score.updated_time > this.startTime / 1000 - 10) {
-            retry = false
-          }
           wx.setStorageSync('score', app.globalData.scoreData)
           wx.showToast({
             title: '预拉取成功',
@@ -189,20 +185,14 @@ Page({
         }
       } else {
         this.fetchData()
-        retry = true
-      }
-      // TODO 基础库 2.10.2-2.11.3 onBackgroundFetchData 是无效的，因此手动循环
-      // TODO 基础库 2.12.0 修复了这个 Bug。使用 wx.canIUse('updateWeChatApp') 判断是否为 2.12.0
-      if (retry) {
-        if (this.startTime + 10000 > +new Date()) {
-          console.log('重新预拉取')
-          // this.timeoutId = setTimeout(this.setBackgroundFetch, 200)
-        }
       }
     }
   },
 
   fetchData: function() {
+    if (typeof this.request !== 'undefined') {
+      return
+    }
     this.time = +new Date() / 1000
     this.request = wx.$request<ITerms>({
       path: 'scores/term',
@@ -407,19 +397,18 @@ Page({
           url: '/pages/previousScore/previousScore',
         })
         break
-
       case 'more':
         wx.navigateTo({
           url: '/pages/more/more?logged_in=1',
         })
         break
-
       case 'reload':
         wx.showToast({
           title: '刷新中',
           icon: 'loading',
           duration: 6000,
         })
+        this.request = undefined
         this.fetchData()
         break
 
@@ -476,6 +465,7 @@ Page({
       icon: 'loading',
       duration: 6000,
     })
+    this.request = undefined
     this.fetchData()
   },
 

@@ -58,52 +58,11 @@ Page({
       })
     }
 
-    // 发送登陆请求
     wx.showLoading({
       title: '登录中',
     })
     wx.login({
-      success: (res) => {
-        wx.$request<any>({
-          actions: false,
-          methods: 'POST',
-          data: {
-            'no': this.data.count,
-            'pass': this.data.password,
-            'code': res.code,
-          },
-          path: 'login',
-          success: (resp) => {
-            app.globalData.authorization = resp.authorization
-            app.globalData.open = resp.open
-            app.globalData.student_id = resp.student_id
-            if (!this.data.count) {
-              wx.setBackgroundFetchToken({ token: '0' })
-              wx.clearStorageSync()
-              wx.switchTab({
-                url: '/pages/overAllPage/overAllPage',
-              })
-              return
-            }
-            wx.setBackgroundFetchToken({
-              token: app.globalData.authorization,
-              complete: (res: any) => {
-                console.log(res)
-
-                wx.setStorageSync('authorization3', app.globalData.authorization)
-                wx.setStorageSync('open', app.globalData.open)
-                wx.setStorageSync('student_id', app.globalData.student_id)
-
-                // 关闭登陆页面，跳转至分数详情页面
-                wx.switchTab({
-                  url: '/pages/overAllPage/overAllPage',
-                })
-              },
-            })
-          },
-          type: 'any',
-        })
-      },
+      success: wx.$loginSuccess,
     })
   },
 

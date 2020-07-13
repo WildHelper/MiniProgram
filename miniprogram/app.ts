@@ -647,3 +647,24 @@ wx.$getTypeOrder = (type: string): number => {
   return types[type]
 }
 export {}
+
+wx.$loginSuccess = (resp) => {
+  app.globalData.authorization = resp.authorization
+  app.globalData.open = resp.open
+  app.globalData.student_id = resp.student_id
+  wx.setBackgroundFetchToken({
+    token: app.globalData.authorization,
+    complete: (res: any) => {
+      console.log(res)
+
+      wx.setStorageSync('authorization3', app.globalData.authorization)
+      wx.setStorageSync('open', app.globalData.open)
+      wx.setStorageSync('student_id', app.globalData.student_id)
+
+      // 关闭登陆页面，跳转至分数详情页面
+      wx.switchTab({
+        url: '/pages/overAllPage/overAllPage',
+      })
+    },
+  })
+}

@@ -21,7 +21,8 @@ interface IExtendedWx extends WechatMiniprogram.Wx {
   }),
   $validateType(arg: any, type: ApiRespTypes): boolean,
   $getTypeOrder(arg: string): number,
-  $validateTypeResp<T>(arg: IApi<T>, type: ApiRespTypes, callbacks?: {noneData?: () => void, failed?: (res?) => void, success: (resp: T, messages: string[]) => void}): boolean
+  $validateTypeResp<T>(arg: IApi<T>, type: ApiRespTypes, callbacks?: {noneData?: () => void, failed?: (res?) => void, success: (resp: T, messages: string[]) => void}): boolean,
+  $loginSuccess(resp: any): void,
 }
 
 // tslint:disable-next-line:interface-name

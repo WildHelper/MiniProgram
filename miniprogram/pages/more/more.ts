@@ -104,12 +104,24 @@ Page({
   },
 
   demo: function() {
-    app.globalData.student_id = this.data.status_messages.demo.id
-    app.globalData.authorization = this.data.status_messages.demo.authentication
-    wx.setBackgroundFetchToken({ token: '0' })
-    wx.clearStorageSync()
-    wx.switchTab({
-      url: '/pages/overAllPage/overAllPage',
+    wx.showLoading({
+      title: '登录中',
+    })
+    wx.login({
+      success: (res) => {
+        wx.$request<any>({
+          actions: false,
+          methods: 'POST',
+          data: {
+            'no': this.data.status_messages.demo.id,
+            'pass': '',
+            'code': res.code,
+          },
+          path: 'login',
+          success: wx.$loginSuccess,
+          type: 'any',
+        })
+      },
     })
   },
 
