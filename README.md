@@ -6,4 +6,4 @@
 
 [版本更新日志](CHANGELOG.md)
 
-![小程序码](https://bjuthelper.applinzi.com/assets/miniprogram-code.jpg)
+![小程序码](https://user-images.githubusercontent.com/6601455/87315927-a5a37100-c557-11ea-88a6-bc897e460752.jpg)
