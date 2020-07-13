@@ -62,7 +62,20 @@ Page({
       title: '登录中',
     })
     wx.login({
-      success: wx.$loginSuccess,
+      success: (res) => {
+        wx.$request<any>({
+          actions: false,
+          methods: 'POST',
+          data: {
+            'no': this.data.count,
+            'pass': this.data.password,
+            'code': res.code,
+          },
+          path: 'login',
+          success: wx.$loginSuccess,
+          type: 'any',
+        })
+      },
     })
   },
 
