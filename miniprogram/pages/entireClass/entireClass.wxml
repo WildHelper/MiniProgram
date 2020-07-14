@@ -113,7 +113,12 @@
 
       </view>
     </view>
+    <view class="weui-cell weui-cell_access" wx:if="{{classes_show && classes_show.length > 0 && ad}}">
+      <ad unit-id="{{ad}}"></ad>
+    </view>
   </view>
+
+
 
   <!-- 没有结果 -->
   <view wx:if="{{count==0}}">

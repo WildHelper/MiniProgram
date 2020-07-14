@@ -37,6 +37,7 @@ Page({
       'passRate': true,
       'gpa': true,
     },
+    ad: undefined,
   },
   data: {},
   // 全部课程
@@ -111,14 +112,16 @@ Page({
 
   bindTypeChange: function(e) {
     const curType = this.data.types[parseInt(e.detail.value, 10)]
-    this.setData({curType: curType})
-    this.filter()
+    this.setData({curType: curType, classes_show: []}, () => {
+      this.filter()
+    })
   },
 
   bindAcademyChange: function(e) {
     const curAcademy = this.data.academys[parseInt(e.detail.value, 10)]
-    this.setData({curAcademy: curAcademy})
-    this.filter()
+    this.setData({curAcademy: curAcademy, classes_show: []}, () => {
+      this.filter()
+    })
   },
 
   filter: function() {
@@ -216,92 +219,97 @@ Page({
       })
       return
     }
-    this.setData(JSON.parse(JSON.stringify(this.defaultData)))
-    this.time = +new Date() / 1000
-    // 获取全部成绩列表
-    wx.showLoading({
-      title: '加载中',
-    })
-    wx.$request({
-      path: 'overview/scores',
-      actions: false,
-      methods: 'GET',
-      type: 'overview',
-      success: (result: IOverview[], messages) => {
-        this.resDate = result
-        this.classes = result
-        this.classesRaw = result
-        this.classesNew = result
-        this.setData({
-          count: result.length,
-          messages: messages,
-        })
-        if (typeof this.classes === 'undefined' || !this.classes || typeof this.classes.slice !== 'function') {
-          return
-        }
-        // 默认显示第一页
-        const classes_show: IOverview[] = this.classes.slice(this.data.curPage, this.data.curPage + this.data.perpage)
-        let endIndex
-        if (this.data.perpage < this.classes.length) { endIndex = this.data.perpage } else { endIndex = this.classes.length}
-        this.setData({
-          classes_show: classes_show,
-          startIndex: 1,
-          endIndex: endIndex,
-        })
+    this.defaultData.ad = app.globalData.scoreData.result.ad_id_banner
+    this.setData(JSON.parse(JSON.stringify(this.defaultData)), () => {
+      this.time = +new Date() / 1000
+      // 获取全部成绩列表
+      wx.showLoading({
+        title: '加载中',
+      })
+      wx.$request({
+        path: 'overview/scores',
+        actions: false,
+        methods: 'GET',
+        type: 'overview',
+        success: (result: IOverview[], messages) => {
+          this.resDate = result
+          this.classes = result
+          this.classesRaw = result
+          this.classesNew = result
+          this.setData({
+            count: result.length,
+            messages: messages,
+          })
+          if (typeof this.classes === 'undefined' || !this.classes || typeof this.classes.slice !== 'function') {
+            return
+          }
+          // 默认显示第一页
+          const classes_show: IOverview[] = this.classes.slice(this.data.curPage, this.data.curPage + this.data.perpage)
+          let endIndex
+          if (this.data.perpage < this.classes.length) { endIndex = this.data.perpage } else { endIndex = this.classes.length}
+          this.setData({
+            classes_show: classes_show,
+            startIndex: 1,
+            endIndex: endIndex,
+          })
 
-        // 遍历所有课程 总结课程种类信息
-        this.setTypesAndAcademies(this.classesRaw)
+          // 遍历所有课程 总结课程种类信息
+          this.setTypesAndAcademies(this.classesRaw)
 
-        // 计算总页数
-        const totalPageNumber = parseInt(String((this.classes.length - 1) / this.data.perpage + 1), 10)
-        const pages = []
-        for (let i = 1; i <= totalPageNumber; i += 1) { pages.push(i) }
-        this.setData({pages: pages})
-        wx.showToast({
-          title: '加载成功',
-          icon: 'success',
-          duration: 500,
-        })
-        wx.$waterMark(this)
-      },
-      failed: () => {
-        wx.hideLoading()
-      },
-      complete: () => {
-        wx.stopPullDownRefresh()
-      },
+          // 计算总页数
+          const totalPageNumber = parseInt(String((this.classes.length - 1) / this.data.perpage + 1), 10)
+          const pages = []
+          for (let i = 1; i <= totalPageNumber; i += 1) { pages.push(i) }
+          this.setData({pages: pages})
+          wx.showToast({
+            title: '加载成功',
+            icon: 'success',
+            duration: 500,
+          })
+          wx.$waterMark(this)
+        },
+        failed: () => {
+          wx.hideLoading()
+        },
+        complete: () => {
+          wx.stopPullDownRefresh()
+        },
+      })
     })
   },
 
   pagingHandeler: function(e) {
-    let curPage = this.data.curPage
-    if (e.currentTarget.dataset.d === 'up') {
-      // 上翻页
-      if (curPage > 0) {
-        curPage -= 1
+    this.setData({classes_show: []}, () => {
+      let curPage = this.data.curPage
+      if (e.currentTarget.dataset.d === 'up') {
+        // 上翻页
+        if (curPage > 0) {
+          curPage -= 1
+        } else {
+          // 弹窗 已到首页
+          wx.showToast({
+            title: '已到首页',
+            icon: 'none',
+            duration: 1500,
+          })
+        }
       } else {
-        // 弹窗 已到首页
-        wx.showToast({
-          title: '已到首页',
-          icon: 'none',
-          duration: 1500,
-        })
+        // 下翻页
+        if (curPage < this.data.pages.length - 1) {
+          curPage += 1
+        } else {
+          // 弹窗 已到末页
+          wx.showToast({
+            title: '已到末页',
+            icon: 'none',
+            duration: 1500,
+          })
+        }
       }
-    } else {
-      // 下翻页
-      if (curPage < this.data.pages.length - 1) {
-        curPage += 1
-      } else {
-        // 弹窗 已到末页
-        wx.showToast({
-          title: '已到末页',
-          icon: 'none',
-          duration: 1500,
-        })
-      }
-    }
 
-    this.changeShow(curPage)
+      this.changeShow(curPage)
+
+    })
   },
 
   JumpHandeler: function(e) {
@@ -314,59 +322,60 @@ Page({
   sort: function(event) {
     this.setData({
       classes_show: [],
+    }, () => {
+      const classesNew: IOverview[] = this.classesNew
+      const poperty = event.currentTarget.dataset.poperty
+      const sortD = this.data.sortD
+      const d = true
+      this.setData({
+        sortD: sortD,
+      })
+      if (!classesNew || typeof classesNew.sort !== 'function') {
+        return
+      }
+      classesNew.sort(function(a, b) {
+        let score0
+        let score1
+        switch (poperty) {
+          case 'avg':
+            score0 = a.avg
+            score1 = b.avg
+            break
+          case 'count':
+            score0 = a.count
+            score1 = b.count
+            break
+          case 'excellentRate':
+            score0 = a.A / a.count
+            score1 = b.A / b.count
+            break
+          case 'passRate':
+            score0 = (a.A + a.B + a.C) / a.count
+            score1 = (b.A + b.B + b.C) / b.count
+            break
+          case 'gpa':
+            score0 = (a.A * 4 + a.B * 3 + a.C * 2) / a.count
+            score1 = (b.A * 4 + b.B * 3 + b.C * 2) / b.count
+            break
+          default:
+            return 0
+        }
+        if (typeof score0 !== 'number' || isNaN(score0)) {
+          score0 = -1
+        }
+        if (typeof score1 !== 'number' || isNaN(score1)) {
+          score1 = -1
+        }
+        // 默认降序，再次点击后升序
+        if (d) {
+          return score1 - score0
+        } else {
+          return score0 - score1
+        }
+      })
+      this.classes = classesNew
+      this.changeShow(0)
     })
-    const classesNew: IOverview[] = this.classesNew
-    const poperty = event.currentTarget.dataset.poperty
-    const sortD = this.data.sortD
-    const d = true
-    this.setData({
-      sortD: sortD,
-    })
-    if (!classesNew || typeof classesNew.sort !== 'function') {
-      return
-    }
-    classesNew.sort(function(a, b) {
-      let score0
-      let score1
-      switch (poperty) {
-        case 'avg':
-          score0 = a.avg
-          score1 = b.avg
-          break
-        case 'count':
-          score0 = a.count
-          score1 = b.count
-          break
-        case 'excellentRate':
-          score0 = a.A / a.count
-          score1 = b.A / b.count
-          break
-        case 'passRate':
-          score0 = (a.A + a.B + a.C) / a.count
-          score1 = (b.A + b.B + b.C) / b.count
-          break
-        case 'gpa':
-          score0 = (a.A * 4 + a.B * 3 + a.C * 2) / a.count
-          score1 = (b.A * 4 + b.B * 3 + b.C * 2) / b.count
-          break
-        default:
-          return 0
-      }
-      if (typeof score0 !== 'number' || isNaN(score0)) {
-        score0 = -1
-      }
-      if (typeof score1 !== 'number' || isNaN(score1)) {
-        score1 = -1
-      }
-      // 默认降序，再次点击后升序
-      if (d) {
-        return score1 - score0
-      } else {
-        return score0 - score1
-      }
-    })
-    this.classes = classesNew
-    this.changeShow(0)
   },
 
   onShow: function() {
@@ -396,30 +405,32 @@ Page({
   },
 
   bindMajor: function(e) {
-    if (e.detail.value.length === 2) {
-      if (this.data.major === '仅公选课') {
-        e.detail.value = ['majorOnly']
-      } else {
-        e.detail.value = ['elective']
+    this.setData({classes_show: []}, () => {
+      if (e.detail.value.length === 2) {
+        if (this.data.major === '仅公选课') {
+          e.detail.value = ['majorOnly']
+        } else {
+          e.detail.value = ['elective']
+        }
       }
-    }
-    if (e.detail.value[0] === 'majorOnly') {
-      this.data.major = app.globalData.scoreData.result.major
-      this.setData({checkedElective: false})
-    } else if (e.detail.value[0] === 'elective') {
-      this.data.major = '仅公选课'
-      this.setData({checked: false})
-    } else {
-      this.data.major = undefined
-      this.setData({checked: false, checkedElective: false})
-    }
-    this.setData({curAcademy: '全部学院', curType: '全部课程类型'})
-    this.filter()
-    this.setTypesAndAcademies(this.classesNew)
-    if (this.data.major === '仅公选课') {
-      this.setData({types: ['全部课程类型', '体育课', '通识教育选修课', '外语选修课', '通识教育任意选修', '经济管理选修课',
-          '数学与自然科学选修课', '校选修课', '经管文法艺术类选修课', '工程自然类选修课']})
-    }
+      if (e.detail.value[0] === 'majorOnly') {
+        this.data.major = app.globalData.scoreData.result.major
+        this.setData({checkedElective: false})
+      } else if (e.detail.value[0] === 'elective') {
+        this.data.major = '仅公选课'
+        this.setData({checked: false})
+      } else {
+        this.data.major = undefined
+        this.setData({checked: false, checkedElective: false})
+      }
+      this.setData({curAcademy: '全部学院', curType: '全部课程类型'})
+      this.filter()
+      this.setTypesAndAcademies(this.classesNew)
+      if (this.data.major === '仅公选课') {
+        this.setData({types: ['全部课程类型', '体育课', '通识教育选修课', '外语选修课', '通识教育任意选修', '经济管理选修课',
+            '数学与自然科学选修课', '校选修课', '经管文法艺术类选修课', '工程自然类选修课']})
+      }
+    })
   },
 })
 

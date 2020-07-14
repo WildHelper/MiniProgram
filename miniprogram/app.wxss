@@ -458,3 +458,11 @@ view {
 button view {
   color: inherit!important;
 }
+.ad {
+  margin: 0rpx 40rpx 30rpx;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+}

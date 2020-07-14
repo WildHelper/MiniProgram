@@ -48,10 +48,8 @@
 
 
 .distribution {
-  margin: 30rpx 40rpx;
-  margin-top: 0rpx;
-  padding: 40rpx 30rpx;
-  padding-bottom: 30rpx;
+  margin: 0rpx 40rpx 30rpx;
+  padding: 40rpx 30rpx 30rpx;
   border-radius: 20rpx;
   box-shadow: 0rpx 0rpx 15rpx #CCC;
   background-color: #FFF;
@@ -144,10 +142,8 @@
 }
 
 .teacher {
-  margin: 30rpx 40rpx;
-  margin-top: 0rpx;
+  margin: 0rpx 40rpx 30rpx;
   padding: 0;
-  padding-left: 0;
   border-radius: 20rpx;
   box-shadow: 0rpx 0rpx 15rpx #CCC;
   background-color: #FFF;

@@ -150,6 +150,7 @@ interface ITerms extends IRespWithTime {
   },
   shared?: string,
   ad_id?: string,
+  ad_id_banner?: string,
 }
 
 interface ITerm {

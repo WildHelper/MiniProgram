@@ -96,6 +96,8 @@ Page({
     my_time: null,
     time: null,
     timestamp: 0,
+
+    ad: undefined,
   },
 
   redirected: false,
@@ -131,6 +133,7 @@ Page({
       yourGPA: option.gpa,
       classID: classID,
       share_score: app.globalData.scoreData.result.share_score,
+      ad: app.globalData.scoreData.result.ad_id_banner,
       my_time: wx.$formatDate(app.globalData.scoreData.result.time),
       option,
     })

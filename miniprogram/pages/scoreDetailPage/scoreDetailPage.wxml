@@ -178,6 +178,10 @@
     <view class="time">样本量：{{count}}</view>
   </view>
 
+  <view class="ad" wx:if="{{averScore && ad}}">
+    <ad unit-id="{{ad}}"></ad>
+  </view>
+
   <!--  各学期成绩列表 -->
   <text class="head" wx:if="{{year_term}}">学期平均成绩</text>
   <view class="teacher">
