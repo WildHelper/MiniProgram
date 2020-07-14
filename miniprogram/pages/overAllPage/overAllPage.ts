@@ -157,7 +157,6 @@ Page({
           wx.$validateTypeResp(parsedData, 'any') && typeof parsedData.result.score !== 'undefined'
           && parsedData.result.score && wx.$validateType(parsedData.result.score, 'term')
       ) {
-        this.time = parsedData.result.score.updated_time
         app.globalData.scoreData = {
           success: parsedData.success,
           result: parsedData.result.score,
@@ -167,6 +166,7 @@ Page({
         this.setData({messages: parsedData.messages, time: wx.$formatDate(parsedData.result.score.time), course_time: wx.$formatDate(app.globalData.scoreData.result.course_time)})
         this.scoreSparser(parsedData.result.score)
         if (this.time < parsedData.result.score.updated_time) {
+          this.time = parsedData.result.score.updated_time
           wx.setStorageSync('score', app.globalData.scoreData)
           wx.showToast({
             title: '预拉取成功',

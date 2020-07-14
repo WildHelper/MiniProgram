@@ -245,7 +245,9 @@ wx.$validateTypeResp = <T>(resp, type, options): boolean => {
   if (resp.success === true) {
     if (resp.errors.length > 0) {
       if (wx.$validateType(resp.result, type)) {
-        success(resp.result, resp.messages, resp.errors)
+        if (typeof success === 'function') {
+          success(resp.result, resp.messages, resp.errors)
+        }
         return true
       } else {
         error(resp.errors)
