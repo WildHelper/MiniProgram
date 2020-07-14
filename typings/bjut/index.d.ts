@@ -23,6 +23,9 @@ interface IExtendedWx extends WechatMiniprogram.Wx {
   $getTypeOrder(arg: string): number,
   $validateTypeResp<T>(arg: IApi<T>, type: ApiRespTypes, callbacks?: {noneData?: () => void, failed?: (res?) => void, success: (resp: T, messages: string[]) => void}): boolean,
   $loginSuccess(resp: any): void,
+  $createVideoAd(arg: any): void,
+  $loadVideoAd(): void,
+  $logout(): void,
 }
 
 // tslint:disable-next-line:interface-name
@@ -63,6 +66,7 @@ interface IGlobalData {
     courseId?: string,
   },
   open?: string,
+  videoAd?: WechatMiniprogram.RewardedVideoAd,
   sceneId: number,
   url_api: string,
   url_logo: string,
@@ -145,6 +149,7 @@ interface ITerms extends IRespWithTime {
     },
   },
   shared?: string,
+  ad_id?: string,
 }
 
 interface ITerm {

@@ -2,8 +2,6 @@
 
 const app: IMyApp = getApp()
 
-let videoAd = null
-
 Page({
   data: {
     typeRaw: {},
@@ -41,6 +39,8 @@ Page({
       text: '拒绝',
     }],
     comment: '',
+    adMessage: undefined,
+    showAd: false,
   },
 
   searchKey: '',
@@ -170,33 +170,7 @@ Page({
         this.setData({course_time: wx.$formatDate(allInfo.terms[year][term].course_time)})
         this.scoreSparser(allInfo.terms[year][term].courses, allInfo.terms[year][term].term_lesson_count, id)
       }
-      if (app.globalData.scoreData.result.ad_messages.length > 2 && typeof wx.createRewardedVideoAd === 'function' && app.globalData.sceneId !== 1154) {
-        videoAd = wx.createRewardedVideoAd({
-          adUnitId: 'adunit-4c614d968a8284b2',
-        })
-        videoAd.onLoad(function() {})
-        videoAd.onError(function() {})
-        videoAd.onClose((res) => {
-          // 用户点击了【关闭广告】按钮
-          if (res && res.isEnded) {
-            wx.setStorageSync('ad_times', app.globalData.scoreData.result.ad_times)
-            this.setData ({
-              halfScreen: {show: false},
-            })
-            wx.showModal({
-              title: '广告观看成功',
-              content: '你获得了 ' + app.globalData.scoreData.result.ad_times + ' 次订阅机会，重新点击要订阅的课程即可订阅',
-              showCancel: false,
-            })
-          } else {
-            wx.showModal({
-              title: '广告中途退出',
-              content: '你必须看完广告后才能进行此操作',
-              showCancel: false,
-            })
-          }
-        })
-      }
+      wx.$createVideoAd(this)
     }
 
     if (options && options.shared && options.uid) {
@@ -466,25 +440,21 @@ Page({
       app.globalData.unread[unreadKey].unread = false
       this.setData({typeOrdered: this.data.typeOrdered})
     }
-    if (!subscribed && app.globalData.scoreData.result.share_score) {
+    if (!subscribed && app.globalData.scoreData.result.share_score && app.globalData.videoAd) {
       if (app.globalData.scoreData.result.ad_messages.length > 2) {
-        const timeRemains = wx.getStorageSync('ad_times')
-        if (timeRemains > 0) {
+        let timeRemains = wx.getStorageSync('ad_times')
+        if (typeof timeRemains === 'number' && timeRemains > 0) {
           this.mySubscribe(url, select)
         } else {
-          const data: any = {
-            show: true,
-            title: app.globalData.scoreData.result.ad_messages[0],
-            desc: app.globalData.scoreData.result.ad_messages[1],
-            tips: app.globalData.scoreData.result.ad_messages[2],
-          }
-          if (app.globalData.scoreData.result.ad_messages.length > 3) {
-            data.subtitle = app.globalData.scoreData.result.ad_messages[3]
-          } else {
-            data.subtitle = undefined
-          }
+          timeRemains = 0
           this.setData ({
-            halfScreen: data,
+            halfScreen: {
+              show: true,
+              title: app.globalData.scoreData.result.ad_messages[0],
+              desc: app.globalData.scoreData.result.ad_messages[1],
+              tips: app.globalData.scoreData.result.ad_messages[2],
+              subtitle: '当前剩余 ' + timeRemains + ' 次订阅机会',
+            },
           })
         }
       } else {
@@ -499,23 +469,19 @@ Page({
   },
 
   bindHalf: function(e) {
+    this.setData ({
+      halfScreen: {show: false},
+    })
     switch (e.detail.index) {
       case 0:
-        videoAd.show().catch(function() {
-          // 失败重试
-          videoAd.load()
-            .then(function() {
-              videoAd.show()
-            })
-            .catch(function() {
-              console.log('激励视频 广告显示失败')
-            })
+        wx.showToast({
+          title: '加载广告中',
+          icon: 'loading',
+          duration: 3000,
         })
+        wx.$loadVideoAd()
         break
       case 1:
-        this.setData ({
-          halfScreen: {show: false},
-        })
         break
     }
   },

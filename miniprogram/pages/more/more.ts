@@ -12,6 +12,8 @@ Page({
     messages: undefined,
     open_status: undefined,
     status_messages: undefined,
+    adMessage: undefined,
+    showAd: false,
 
     showActionsheet: false,
     groups: [],
@@ -61,6 +63,7 @@ Page({
         switches: app.globalData.scoreData.result.switches,
         is_no_password: app.globalData.scoreData.result.is_no_password,
       })
+      wx.$createVideoAd(this)
     }
     this.setData({
       show_exam: app.globalData.show_exam,
@@ -134,26 +137,7 @@ Page({
   btnClick: function(e) {
     switch (e.detail.value) {
       case 1:
-        wx.clearStorageSync()
-        wx.setBackgroundFetchToken({
-          token: '0',
-        })
-        app.globalData = {
-          sceneId: app.globalData.sceneId,
-          url_logo: app.globalData.url_logo,
-          url_api: app.globalData.url_api,
-          background: undefined, schedule: undefined,
-          scoreData: undefined, authorization: null,
-          student_id: null, unread: {},
-          show_exam: false, show_courses: false,
-          refreshCourses: false, map: {},
-          exam_tab: 2, courses_tab: 3,
-          backgroundFetchTimestamp: 0,
-          redirect: {},
-        }
-        wx.reLaunch({
-          url: '/pages/login/login',
-        })
+        wx.$logout()
         break
       case 2:
         wx.showToast({
@@ -288,6 +272,14 @@ Page({
         value: 1,
       },
     })
+  },
+  ad: function() {
+    wx.showToast({
+      title: '加载广告中',
+      icon: 'loading',
+      duration: 3000,
+    })
+    wx.$loadVideoAd()
   },
 })
 

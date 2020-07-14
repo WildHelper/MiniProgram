@@ -44,6 +44,16 @@
       </view>
     </view>
 
+    <block wx:if="{{adMessage}}">
+      <view class="message" style="display: flex">
+        <icon style="flex: 1" class="icon-box-img" type="info" size="64rpx"></icon>
+        <text style="flex: 8">{{adMessage}}</text>
+      </view>
+      <view style="margin-bottom: 2rem" wx:if="{{showAd}}">
+        <button bindtap="ad" type="primary">观看广告</button>
+      </view>
+    </block>
+
     <!-- CET4成绩 -->
     <view wx:if="{{switches.cet}}" class="previousAndCETScore" bindtap="bindtapHandeler" data-from="CET">
       <text class="title">四六级成绩</text>

@@ -138,8 +138,13 @@ wx.$validateType = (data, type): boolean => {
   }
 }
 
-const logout = () => {
+wx.$logout = () => {
+  let timeRemains = wx.getStorageSync('ad_times')
+  if (typeof timeRemains !== 'number' || isNaN(timeRemains)) {
+    timeRemains = 0
+  }
   wx.clearStorageSync()
+  wx.setStorageSync('ad_times', timeRemains)
   wx.setBackgroundFetchToken({
     token: '',
   })
@@ -172,7 +177,7 @@ const error = (errors?: IApiError[], callback?: () => void) => {
     wx.hideToast()
     for (const i of errors) {
       if (i.code === 1004 || i.code === 1005 || i.code === 1100) {
-        logout()
+        wx.$logout()
         return
       }
     }
@@ -187,7 +192,7 @@ const error = (errors?: IApiError[], callback?: () => void) => {
       success: () => {
         for (const i of errors) {
           if (i.code >= 1000 && i.code < 2000) {
-            logout()
+            wx.$logout()
             return
           } else if (i.code >= 500 && i.code < 600) {
             console.log('实时日志上报', i)
@@ -667,4 +672,101 @@ wx.$loginSuccess = (resp) => {
       })
     },
   })
+}
+
+wx.$createVideoAd = (that) => {
+  let timeRemains = wx.getStorageSync('ad_times')
+  if (typeof timeRemains !== 'number' || isNaN(timeRemains)) {
+    timeRemains = 0
+  }
+  let notice = '当前剩余 ' + timeRemains + ' 次订阅机会'
+  that.setData({
+    adMessage: '广告正在加载中…' + notice,
+    showAd: false,
+  })
+  if (
+      app.globalData.scoreData && !app.globalData.videoAd && typeof app.globalData.scoreData.result !== 'undefined' && wx.$validateType(app.globalData.scoreData.result, 'term') &&
+      app.globalData.scoreData.result.ad_id && typeof wx.createRewardedVideoAd === 'function' && app.globalData.sceneId !== 1154
+  ) {
+    app.globalData.videoAd = wx.createRewardedVideoAd({
+      adUnitId: app.globalData.scoreData.result.ad_id,
+    })
+    app.globalData.videoAd.onError(() => {
+      app.globalData.videoAd = undefined
+      that.setData({
+        adMessage: '广告暂不可用。' + notice,
+        showAd: false,
+      })
+    })
+    app.globalData.videoAd.onLoad(() => {
+      that.setData({
+        adMessage: app.globalData.scoreData.result.ad_messages[3] + notice,
+        showAd: true,
+      })
+    })
+    app.globalData.videoAd.onClose((res) => {
+      if (res && res.isEnded) {
+        timeRemains += app.globalData.scoreData.result.ad_times
+        wx.setStorageSync('ad_times', timeRemains)
+        that.setData({
+          halfScreen: {show: false},
+        })
+        notice = '当前剩余 ' + timeRemains + ' 次订阅机会'
+        wx.showModal({
+          title: '广告观看成功',
+          content: notice,
+          showCancel: false,
+        })
+      } else {
+        wx.showModal({
+          title: '广告中途退出',
+          content: '必须看完广告才可获得订阅机会',
+          showCancel: false,
+        })
+      }
+    })
+  }
+  if (app.globalData.videoAd) {
+    that.setData({
+      adMessage: app.globalData.scoreData.result.ad_messages[3] + notice,
+      showAd: true,
+    })
+  }
+}
+
+wx.$loadVideoAd = () => {
+  if (app.globalData.videoAd) {
+    app.globalData.videoAd.show().then(() => {
+      wx.hideToast()
+    }).catch(() => {
+      wx.showToast({
+        title: '重新加载广告中',
+        icon: 'loading',
+        duration: 3000,
+      })
+      app.globalData.videoAd.load().then(() => {
+        app.globalData.videoAd.show().then(() => {
+          wx.hideToast()
+        }).catch(() => {
+          wx.showToast({
+            title: '广告暂不可用',
+            icon: 'none',
+            duration: 3000,
+          })
+        })
+      }).catch(() => {
+        wx.showToast({
+          title: '广告暂不可用',
+          icon: 'none',
+          duration: 3000,
+        })
+      })
+    })
+  } else {
+    wx.showToast({
+      title: '广告暂不可用',
+      icon: 'none',
+      duration: 3000,
+    })
+  }
 }
