@@ -178,7 +178,7 @@
     <view class="time">样本量：{{count}}</view>
   </view>
 
-  <view class="ad" wx:if="{{averScore && ad}}">
+  <view class="ad" wx:if="{{averScore && ad && !halfScreen.show && ifDistribution}}">
     <ad unit-id="{{ad}}"></ad>
   </view>
 
