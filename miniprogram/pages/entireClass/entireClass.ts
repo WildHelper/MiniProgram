@@ -209,6 +209,7 @@ Page({
     this.setData({types: types, academys: academy})
   },
 
+  resp: undefined,
   onLoad: function() {
     if (
       typeof app.globalData.scoreData === 'undefined' || !app.globalData.scoreData ||
@@ -221,52 +222,64 @@ Page({
     }
     this.defaultData.ad = app.globalData.scoreData.result.ad_id_banner
     this.setData(JSON.parse(JSON.stringify(this.defaultData)), () => {
+      const success = (result: IOverview[], messages) => {
+        this.resDate = result
+        this.classes = result
+        this.classesRaw = result
+        this.classesNew = result
+        this.setData({
+          count: result.length,
+          messages: messages,
+        })
+        if (typeof this.classes === 'undefined' || !this.classes || typeof this.classes.slice !== 'function') {
+          return
+        }
+        // 默认显示第一页
+        const classes_show: IOverview[] = this.classes.slice(this.data.curPage, this.data.curPage + this.data.perpage)
+        let endIndex
+        if (this.data.perpage < this.classes.length) { endIndex = this.data.perpage } else { endIndex = this.classes.length}
+        this.setData({
+          classes_show: classes_show,
+          startIndex: 1,
+          endIndex: endIndex,
+        })
+
+        // 遍历所有课程 总结课程种类信息
+        this.setTypesAndAcademies(this.classesRaw)
+
+        // 计算总页数
+        const totalPageNumber = parseInt(String((this.classes.length - 1) / this.data.perpage + 1), 10)
+        const pages = []
+        for (let i = 1; i <= totalPageNumber; i += 1) { pages.push(i) }
+        this.setData({pages: pages})
+        wx.showToast({
+          title: '加载成功',
+          icon: 'success',
+          duration: 500,
+        })
+        wx.$waterMark(this)
+      }
+      if (this.resp) {
+        success(this.resp.resp, this.resp.messages)
+        wx.stopPullDownRefresh()
+        return
+      }
       this.time = +new Date() / 1000
       // 获取全部成绩列表
       wx.showLoading({
         title: '加载中',
       })
-      wx.$request({
+      wx.$request<IOverview[]>({
         path: 'overview/scores',
         actions: false,
         methods: 'GET',
         type: 'overview',
-        success: (result: IOverview[], messages) => {
-          this.resDate = result
-          this.classes = result
-          this.classesRaw = result
-          this.classesNew = result
-          this.setData({
-            count: result.length,
-            messages: messages,
-          })
-          if (typeof this.classes === 'undefined' || !this.classes || typeof this.classes.slice !== 'function') {
-            return
+        success: (resp, messages) => {
+          this.resp = {
+            resp,
+            messages,
           }
-          // 默认显示第一页
-          const classes_show: IOverview[] = this.classes.slice(this.data.curPage, this.data.curPage + this.data.perpage)
-          let endIndex
-          if (this.data.perpage < this.classes.length) { endIndex = this.data.perpage } else { endIndex = this.classes.length}
-          this.setData({
-            classes_show: classes_show,
-            startIndex: 1,
-            endIndex: endIndex,
-          })
-
-          // 遍历所有课程 总结课程种类信息
-          this.setTypesAndAcademies(this.classesRaw)
-
-          // 计算总页数
-          const totalPageNumber = parseInt(String((this.classes.length - 1) / this.data.perpage + 1), 10)
-          const pages = []
-          for (let i = 1; i <= totalPageNumber; i += 1) { pages.push(i) }
-          this.setData({pages: pages})
-          wx.showToast({
-            title: '加载成功',
-            icon: 'success',
-            duration: 500,
-          })
-          wx.$waterMark(this)
+          success(resp, messages)
         },
         failed: () => {
           wx.hideLoading()

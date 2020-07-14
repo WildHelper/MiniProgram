@@ -413,7 +413,14 @@ view {
   background-color: transparent;
   padding: 0!important;
 }
-
+.ad {
+  margin: 0rpx 40rpx 30rpx;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 0rpx 15rpx #CCC;
+  background-color: #FFF;
+}
 @media (prefers-color-scheme: dark) {
   :root {
     background-color: #000;
@@ -439,7 +446,7 @@ view {
   view {
     color: #FFF;
   }
-  .totalScore, .previousAndCETScore, .classes, .search, .scores, .distribution, .teacher, .weui-form__control-area, .weui-form__control-area .weui-cell {
+  .totalScore, .previousAndCETScore, .classes, .search, .scores, .distribution, .teacher, .weui-form__control-area, .weui-form__control-area .weui-cell, .ad {
     background-color: #1c1c1e !important;
     box-shadow: none !important;
     border: 1rpx solid #3d3c41;
@@ -457,12 +464,4 @@ view {
 }
 button view {
   color: inherit!important;
-}
-.ad {
-  margin: 0rpx 40rpx 30rpx;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 20rpx;
-  box-shadow: 0rpx 0rpx 15rpx #CCC;
-  background-color: #FFF;
 }
