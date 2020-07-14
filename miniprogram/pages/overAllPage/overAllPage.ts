@@ -40,7 +40,6 @@ Page({
     sceneId: app.globalData.sceneId,
   },
   time: 0,
-  startTime: 0,
   request: undefined,
   timeoutId: undefined,
 
@@ -70,8 +69,6 @@ Page({
 
     // 通过api获取分数信息
     this.setData( { success: 0 } )
-
-    this.startTime = +new Date()
 
     wx.showToast({
       title: '更新成绩中',
@@ -118,19 +115,6 @@ Page({
     // @ts-ignore
     // TODO: Typings 错误
     wx.onBackgroundFetchData((res) => {
-      wx.showToast({
-        title: '预拉取成功',
-        icon: 'success',
-        duration: 500,
-      })
-      this.startTime -= 10000
-      if (typeof this.request !== 'undefined' && typeof this.request.abort === 'function') {
-        this.request.abort()
-      }
-      this.request = {}
-      if (this.timeoutId !== 'undefined') {
-        clearTimeout(this.timeoutId)
-      }
       console.log('onBackgroundFetchData接收到数据')
       this.parseFetchData(res)
     })
@@ -166,6 +150,7 @@ Page({
         this.setData({messages: parsedData.messages, time: wx.$formatDate(parsedData.result.score.time), course_time: wx.$formatDate(app.globalData.scoreData.result.course_time)})
         this.scoreSparser(parsedData.result.score)
         if (this.time < parsedData.result.score.updated_time) {
+          // 预拉取到的是新数据
           this.time = parsedData.result.score.updated_time
           wx.setStorageSync('score', app.globalData.scoreData)
           wx.showToast({
@@ -184,6 +169,7 @@ Page({
           }
         }
       } else {
+        // 预拉失败，降回普通接口
         this.fetchData()
       }
     }
