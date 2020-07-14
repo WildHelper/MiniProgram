@@ -60,6 +60,16 @@
       <text class="title">考试时间</text>
       <view class='arrow'></view>
     </view>
+
+    <view style="margin: 2rem 0" wx:if="{{adMessage}}">
+      <view class="message" style="display: flex">
+        <icon style="flex: 1" class="icon-box-img" type="info" size="64rpx"></icon>
+        <text style="flex: 8">{{adMessage}}</text>
+      </view>
+      <view wx:if="{{showAd}}">
+        <button bindtap="ad" type="primary">观看广告</button>
+      </view>
+    </view>
   </view>
   <view wx:elif="{{status_messages['demo']}}">
     <view>
@@ -82,15 +92,6 @@
   <view wx:for="{{footer}}" class="message {{filter.addHeading(item, 'class')}}">{{filter.addHeading(item, 'text')}}</view>
 
   <view wx:if="{{logged_in && finished}}">
-    <block wx:if="{{adMessage}}">
-      <view class="message" style="display: flex">
-        <icon style="flex: 1" class="icon-box-img" type="info" size="64rpx"></icon>
-        <text style="flex: 8">{{adMessage}}</text>
-      </view>
-      <view style="margin-bottom: 1rem" wx:if="{{showAd}}">
-        <button bindtap="ad" type="primary">观看广告</button>
-      </view>
-    </block>
     <!--取消共享按钮-->
     <view wx:if="{{share_score && !is_no_password}}" style="margin: 1rem 0">
       <button bindtap="optOut" type="warn">撤销授权</button>
