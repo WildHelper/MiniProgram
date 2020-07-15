@@ -152,7 +152,7 @@ wx.$logout = () => {
   wx.clearStorageSync()
   wx.setStorageSync('ad_times', timeRemains)
   wx.setBackgroundFetchToken({
-    token: '',
+    token: '0',
   })
   app.globalData = {
     sceneId: app.globalData.sceneId,
