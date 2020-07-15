@@ -2,6 +2,8 @@
 
 2020中国高校计算机大赛 微信小程序应用开发赛 决赛入围作品
 
+本程序在 [GNU Affero GPL v3.0](LICENSE) 下开源。若修改本程序并在网络上提供服务，必须使用相同协议公开修改后的完整源代码。
+
 开发时使用了 TypeScript，需要将其将其编译成 JavaScript 才可使用
 
 [版本更新日志](CHANGELOG.md)
@@ -35,6 +37,8 @@
 + [slimphp/Slim](https://github.com/slimphp/Slim)
 + [slimphp/Slim-Psr7](https://github.com/slimphp/Slim-Psr7)
 + [Tencent/weui](https://github.com/Tencent/weui)
++ [brix/crypto-js](https://github.com/brix/crypto-js)
++ [nodeca/pako](https://github.com/nodeca/pako)
 
 ### Apache License v2.0
 
