@@ -4,6 +4,8 @@
 
 本程序在 [GNU Affero GPL v3.0](LICENSE) 下开源。若修改本程序并在网络上提供服务，必须使用相同协议公开修改后的完整源代码。
 
+Copyright (C) 2020 郭泽宇 <ze3kr@icloud.com>, 文一涵
+
 开发时使用了 TypeScript，需要将其将其编译成 JavaScript 才可使用
 
 [版本更新日志](CHANGELOG.md)
