@@ -434,7 +434,7 @@ Page({
   // 点击课程处理
   bindtapHandeler: function(e) {
     const {id, year, term, subscribed, select, instructor} = e.currentTarget.dataset
-    const url = '../scoreDetailPage/scoreDetailPage?id=' + id + '&year=' + year + '&term=' + term + '&instructor=' + instructor
+    const url = '../scoreDetailPage/scoreDetailPage?id=' + id + '&year=' + year + '&term=' + term + '&instructor=' + encodeURIComponent(instructor)
     const unreadKey = year + '-' + term + '-' + id
     if (app.globalData.unread && app.globalData.unread[unreadKey] && app.globalData.unread[unreadKey].unread) {
       app.globalData.unread[unreadKey].unread = false

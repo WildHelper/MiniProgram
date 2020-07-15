@@ -223,7 +223,8 @@ Page({
             if (typeof app.globalData.unread[unreadKey] !== 'undefined') {
               app.globalData.unread[unreadKey].unread = false
               wx.navigateTo({
-                url: '/pages/scoreDetailPage/scoreDetailPage?year=' + year + '&term=' + term + '&id=' + courseId,
+                url: '/pages/scoreDetailPage/scoreDetailPage?year=' + year + '&term=' + term + '&id=' + courseId +
+                    '&instructor=' + encodeURIComponent((app.globalData.unread[unreadKey] as IUngradedCourse).instructor),
               })
             }
           }
