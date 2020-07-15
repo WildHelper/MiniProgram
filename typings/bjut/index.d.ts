@@ -91,6 +91,10 @@ interface IApi<T> {
     page: number,
     per_page: number,
     total_count: number,
+  },
+  encrypted?: {
+    iv: string,
+    data: string,
   }
 }
 

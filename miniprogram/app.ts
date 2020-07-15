@@ -1,5 +1,11 @@
 /// <reference path="../typings/index.d.ts" />
 
+// tslint:disable-next-line:no-var-requires
+const CryptoJS = require('crypto-js')
+// tslint:disable-next-line:no-var-requires
+const pako = require('pako')
+const decompress = str => pako.inflateRaw(str, {to: 'string'})
+
 // app.js
 App({
   // 全局变量
@@ -241,6 +247,32 @@ wx.$validateTypeResp = <T>(resp, type, options): boolean => {
       duration: 3000,
     })
     return false
+  }
+  if (typeof resp.encrypted === 'object' && resp.encrypted.data && resp.encrypted.iv) {
+    // https://gist.github.com/getify/7325764
+    const convertWordArrayToUint8Array = (wordArray) => {
+      const len = wordArray.words.length
+      const u8_array = new Uint8Array(len << 2)
+      let offset = 0
+      let word
+      for (let i = 0; i < len; i++) {
+        word = wordArray.words[i]
+        u8_array[offset++] = word >> 24
+        u8_array[offset++] = (word >> 16) & 0xff
+        u8_array[offset++] = (word >> 8) & 0xff
+        u8_array[offset++] = word & 0xff
+      }
+      return u8_array
+    }
+    let decrypt = CryptoJS.AES.decrypt(
+        resp.encrypted.data,
+        CryptoJS.SHA256(app.globalData.open),
+        { iv: CryptoJS.enc.Hex.parse(resp.encrypted.iv) },
+    )
+    decrypt = decompress(convertWordArrayToUint8Array(decrypt))
+    try {
+      resp.result = JSON.parse(decrypt)
+    } catch (e) {}
   }
   if (resp.success === true) {
     if (resp.errors.length > 0) {

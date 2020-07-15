@@ -4,6 +4,7 @@
   "description": "野生工大助手小程序",
   "main": "app.js",
   "dependencies": {
+    "pako": "^1.0.11",
     "weui-miniprogram": "^1.0.4"
   },
   "devDependencies": {
