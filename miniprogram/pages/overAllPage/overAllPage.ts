@@ -168,8 +168,12 @@ Page({
             this.timeoutId = undefined
           }
         }
-      } else {
-        // 预拉失败，降回普通接口
+      } else if (typeof this.request === 'undefined') {
+        wx.showToast({
+          title: '重试中',
+          icon: 'loading',
+          duration: 6000,
+        })
         this.fetchData()
       }
     }
