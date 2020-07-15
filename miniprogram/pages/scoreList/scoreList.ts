@@ -96,9 +96,11 @@ Page({
   },
 
   onLoad: function(options) {
-    wx.setNavigationBarTitle({
-      title: '成绩详情',
-    })
+    if (app.globalData.sceneId !== 1154) {
+      wx.setNavigationBarTitle({
+        title: '成绩详情',
+      })
+    }
     this.options = options
     const {id, year, term} = options
     const pageLoaded = () => {
@@ -201,9 +203,11 @@ Page({
           }
           if (this.data.comment) {
             this.data.comment = '这是' + result.major + ' – ' + result.name + '的成绩\n' + this.data.comment
-            wx.setNavigationBarTitle({
-              title: result.name + '的成绩',
-            })
+            if (app.globalData.sceneId !== 1154) {
+              wx.setNavigationBarTitle({
+                title: result.name + '的成绩',
+              })
+            }
           }
           for (const y in result.terms) {
             for (const t in result.terms[y]) {

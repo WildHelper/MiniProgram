@@ -47,10 +47,11 @@ Page({
     if (app.globalData.sceneId === 1154) {
       this.setData( { success: 3 } )
       return
+    } else {
+      wx.setNavigationBarTitle({
+        title: '成绩总览',
+      })
     }
-    wx.setNavigationBarTitle({
-      title: '成绩总览',
-    })
     if (app.globalData.sceneId === 1155) {
       const authorization = wx.getStorageSync('authorization3')
       const student_id = wx.getStorageSync('student_id')

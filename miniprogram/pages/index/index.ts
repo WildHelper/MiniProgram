@@ -62,9 +62,11 @@ Page({
   semesters: ['最新学期'],
 
   onLoad: function(options) {
-    wx.setNavigationBarTitle({
-      title: '我的课表',
-    }).then(() => {})
+    if (app.globalData.sceneId !== 1154) {
+      wx.setNavigationBarTitle({
+        title: '我的课表',
+      })
+    }
     this.theme = wx.getSystemInfoSync().theme
     if ( typeof wx.onThemeChange === 'function') {
       wx.onThemeChange(() => {
@@ -348,13 +350,17 @@ Page({
       }
       if (this.data.comment) {
         this.data.comment = '这是' + res.major + ' – ' + res.name + '的课表\n' + this.data.comment
-        wx.setNavigationBarTitle({
-          title: res.name + '的课表',
-        })
+        if (app.globalData.sceneId !== 1154) {
+          wx.setNavigationBarTitle({
+            title: res.name + '的课表',
+          })
+        }
       } else {
-        wx.setNavigationBarTitle({
-          title: '我的课表',
-        })
+        if (app.globalData.sceneId !== 1154) {
+          wx.setNavigationBarTitle({
+            title: '我的课表',
+          })
+        }
       }
     } else {
       this.share_title = '快查查' + res.year.substring(2, 4) + '-' + res.year.substring(7, 9) + '第' + res.term + '学期的课表!'
