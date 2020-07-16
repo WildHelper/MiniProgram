@@ -42,7 +42,7 @@ Page({
     class: null,
 
     // 课程基本信息
-    className: '加载中',
+    className: undefined,
     classID: undefined,
     credit: undefined,
     classType: undefined,
@@ -241,6 +241,9 @@ Page({
         predict -= data.scores[i]
       }
       predict = (predict / data.count * 100).toFixed(0) + '%'
+    }
+    if (this.data.className) {
+      data.name = this.data.className
     }
     this.setData({
       className: data.name,

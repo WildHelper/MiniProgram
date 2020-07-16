@@ -10,7 +10,7 @@ Copyright (C) 2020 郭泽宇 <ze3kr@icloud.com>, 文一涵
 
 ![小程序码](https://user-images.githubusercontent.com/6601455/87315927-a5a37100-c557-11ea-88a6-bc897e460752.jpg)
 
-体验账户用户名: `demo` 密码: (留空即可)
+体验账户用户名: `bjutdemo` 密码: (留空即可)
 
 ## 安装
 

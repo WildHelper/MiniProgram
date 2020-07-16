@@ -190,43 +190,20 @@ Page({
           icon: 'loading',
           duration: 6000,
         })
-        wx.cloud.callFunction({
-          name: 'common',
-          data: {
-            action: 'subscribe',
-            courseId: 'RESET',
-            userId: app.globalData.student_id,
-            auth: app.globalData.authorization,
-          },
-          success: (obj: any) => {
-            const res = {data: obj.result}
-            if (res.data.success) {
-              wx.showToast({
-                title: '重置成功',
-                icon: 'success',
-                duration: 500,
-              })
-              this.onLoad()
-              app.globalData.scoreData.result.has_open = true
-              wx.pageScrollTo({
-                scrollTop: 0,
-                duration: 0,
-              })
-            } else {
-              wx.hideToast()
-              wx.showModal({
-                title: '重置失败',
-                content: res.data.errors.join('\n'),
-                showCancel: false,
-              })
-            }
-          },
-          fail: function() {
-            wx.showModal({
-              title: '无法连接到服务器，请检查网络',
-              showCancel: false,
-            })
-          },
+        const success = () => {
+          wx.showToast({
+            title: '重置成功',
+            icon: 'success',
+            duration: 500,
+          })
+        }
+        wx.$request({
+          actions: false,
+          path: 'subscribe/RESET',
+          success,
+          noneData: success,
+          type: 'any',
+          methods: 'POST',
         })
         break
       default:

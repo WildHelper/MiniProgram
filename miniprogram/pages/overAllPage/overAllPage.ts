@@ -87,7 +87,6 @@ Page({
         this.scoreSparser(score.result)
         // 不是基础库 2.12.0，直接再发一次请求
         if (!wx.canIUse('updateWeChatApp')) {
-          this.time = +new Date() / 1000
           this.fetchData()
         } else {
           wx.showToast({
@@ -108,7 +107,6 @@ Page({
         }
         this.setBackgroundFetch()
       } else {
-        this.time = +new Date() / 1000
         this.fetchData()
       }
     }
@@ -184,7 +182,7 @@ Page({
     if (typeof this.request !== 'undefined') {
       return
     }
-    this.time = +new Date() / 1000
+    this.time = +new Date() / 1000 - 5
     this.request = wx.$request<ITerms>({
       path: 'scores/term',
       actions: true,

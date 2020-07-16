@@ -272,7 +272,6 @@ Page({
         if (this.theme === 'dark') {
           newColor = '#' + newColor.substring(1) + '80'
         }
-        console.log(color[time][date])
         if (color[time][date] === 'transparent') {
           color[time][date] = newColor
         }
