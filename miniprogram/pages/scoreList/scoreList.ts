@@ -21,7 +21,7 @@ Page({
     map: app.globalData.map,
     share_score: false,
     is_no_password: false,
-    time: null,
+    time: '从未',
 
     halfScreen: {
       show: false,
@@ -115,7 +115,7 @@ Page({
         return
       }
       const allInfo = app.globalData.scoreData.result
-      this.options.uid = app.globalData.student_id
+      this.options.uid = app.globalData.scoreData.result.sid
       this.options.shared = app.globalData.scoreData.result.shared
 
       this.setData({share_score: app.globalData.scoreData.result.share_score, is_no_password: app.globalData.scoreData.result.is_no_password, time: wx.$formatDate(app.globalData.scoreData.result.time), comment: this.data.comment})

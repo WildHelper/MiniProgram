@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "pako": "^1.0.11",
+    "crypto-js": "^4.0.0",
     "weui-miniprogram": "^1.0.4"
   },
   "devDependencies": {
