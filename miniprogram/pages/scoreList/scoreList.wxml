@@ -86,7 +86,7 @@
                  data-select='{{item.courseSelectId}}' data-year='{{item.year}}'  data-term='{{item.term}}' data-instructor="{{item.instructor}}">
         <view class="weui-cell__bd"><text class="course-title">{{item.name}}</text><text class="course-desc"><text wx:if="{{item.score !== -3}}">{{item.credit}} | </text>{{item.id}}<text wx:if="{{item.instructor}}"> | {{item.instructor}}</text><text wx:if="{{item.comment && !(item.score < -2)}}"> | {{item.comment}}</text></text></view>
         <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{item.unread === true}}">点击查看</view>
-        <view class="weui-cell__ft weui-cell__ft_in-access" wx:elif="{{ !(item.score < 0) }}">{{filter.toFix(item.gpa, 1)}}<text decode="{{true}}">&nbsp;|&nbsp;{{item.score}}</text></view>
+        <view class="weui-cell__ft weui-cell__ft_in-access" wx:elif="{{ !(item.score < 0) }}">{{filter.toFix(item.gpa, 2)}}<text decode="{{true}}">&nbsp;|&nbsp;{{item.score}}</text></view>
         <view class="weui-cell__ft weui-cell__ft_in-access small" wx:elif="{{!share_score && item.score === -2}}" style="color: #E64340">失效需授权</view>
         <view class="weui-cell__ft weui-cell__ft_in-access small" wx:elif="{{!share_score && item.score === -1}}" style="color: #E64340">授权后订阅</view>
         <view class="weui-cell__ft weui-cell__ft_in-access" wx:elif="{{item.score === -2 || map[item.courseSelectId]}}">已订阅</view>

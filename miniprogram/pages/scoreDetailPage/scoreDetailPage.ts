@@ -42,7 +42,7 @@ Page({
     class: null,
 
     // 课程基本信息
-    className: undefined,
+    className: '',
     classID: undefined,
     credit: undefined,
     classType: undefined,
@@ -86,7 +86,6 @@ Page({
       text: '接受',
     }, {
       type: 'default',
-      className: '',
       text: '拒绝',
     }],
     demo: false,
