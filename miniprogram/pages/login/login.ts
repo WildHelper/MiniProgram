@@ -10,6 +10,7 @@ Page({
     isWaring: false,
     isLoggedIn: true,
     url_logo: app.globalData.url_logo,
+    message: '',
   },
 
   // 登陆表单数据处理-用户名输入框变更
@@ -88,31 +89,42 @@ Page({
       }
     }
 
-    if (app.globalData.student_id && app.globalData.authorization && app.globalData.open) {
-      wx.getBackgroundFetchToken({
-        complete: (res: any) => {
-          if (res.errMsg !== 'getBackgroundFetchToken:ok' || res.token !== app.globalData.authorization) {
-            wx.setBackgroundFetchToken({
-              token: app.globalData.authorization,
-              complete: () => {
+    wx.$request<any>({
+      actions: false,
+      methods: 'GET',
+      path: 'endpoint',
+      type: 'any',
+      success: (resp) => {
+        app.globalData.url_api = resp.default.url
+        this.setData({message: resp.default.message})
+        console.log(resp.default.url)
+        if (app.globalData.student_id && app.globalData.authorization && app.globalData.open) {
+          wx.getBackgroundFetchToken({
+            complete: (res: any) => {
+              if (res.errMsg !== 'getBackgroundFetchToken:ok' || res.token !== app.globalData.authorization) {
+                wx.setBackgroundFetchToken({
+                  token: app.globalData.authorization,
+                  complete: () => {
+                    wx.switchTab({
+                      url: '/pages/overAllPage/overAllPage',
+                    })
+                  },
+                })
+              } else {
                 wx.switchTab({
                   url: '/pages/overAllPage/overAllPage',
                 })
-              },
-            })
-          } else {
-            wx.switchTab({
-              url: '/pages/overAllPage/overAllPage',
-            })
-          }
-        },
-      })
-    } else {
-      app.globalData.authorization = ''
-      app.globalData.open = ''
-      app.globalData.student_id = ''
-      this.setData( { isLoggedIn: false } )
-    }
+              }
+            },
+          })
+        } else {
+          app.globalData.authorization = ''
+          app.globalData.open = ''
+          app.globalData.student_id = ''
+          this.setData( { isLoggedIn: false } )
+        }
+      },
+    })
   },
 
   onShareAppMessage: function() {

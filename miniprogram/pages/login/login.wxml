@@ -52,7 +52,7 @@
 			</view>
 		</view>
 
-		<view style="color: var(--weui-FG-1); text-align: center; padding: 0 100rpx 30rpx 100rpx; font-size: 25rpx"><text>登录信息会存在此设备中以自动登录\n密码留空以免密登录，服务器永不存储你的密码</text></view>
+		<view style="color: var(--weui-FG-1); text-align: center; padding: 0 100rpx 30rpx 100rpx; font-size: 25rpx"><text>{{message}}</text></view>
 		<view>
 			<button bindtap="onConfirm" type="primary">登录</button>
 		</view>
@@ -63,7 +63,7 @@
 	</view>
 	<view wx:if="{{isLoggedIn}}" style="padding-top: 60rpx">
 		<view class="page__bd">
-			<mp-loading type="circle" tips="正在载入成绩…"></mp-loading>
+			<mp-loading type="circle" tips="正在载入…"></mp-loading>
 		</view>
 	</view>
 </view>
