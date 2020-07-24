@@ -10,7 +10,7 @@ const decompress = str => pako.inflateRaw(str, {to: 'string'})
 App({
   // 全局变量
   globalData: {
-    url_api: 'https://bjuthelper.applinzi.com/v2/',
+    url_api: 'https://wild.applinzi.com/v2/',
     url_logo: 'https://bjuthelper.applinzi.com/assets/logo.svg',
     authorization: wx.getStorageSync('authorization3'),  // 用户唯一标识字段
     open: wx.getStorageSync('open'),
@@ -321,8 +321,8 @@ wx.$request = <T>({actions, success, methods, noneData, failed, complete, path, 
     data,
     header: {
       Authorization: app.globalData.authorization,
-      'X-Bjut-User': app.globalData.student_id,
-      'X-Bjut-Open': app.globalData.open,
+      'X-Wild-User': app.globalData.student_id,
+      'X-Wild-Open': app.globalData.open,
     },
     // @ts-ignore
     success: (res: IResp<IApi<T>>) => {
