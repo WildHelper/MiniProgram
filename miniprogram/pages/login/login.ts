@@ -81,7 +81,7 @@ Page({
   },
 
   onLoad: function(options) {
-    if (typeof options !== 'undefined' && typeof options.year !== 'undefined' && typeof options.term !== 'undefined'  && typeof options.courseId !== 'undefined') {
+    if (typeof options !== 'undefined' && options.year && options.term && options.courseId) {
       app.globalData.redirect = {
         year: options.year,
         term: options.term,
@@ -89,13 +89,40 @@ Page({
       }
     }
 
+    if (!app.globalData.authorization || !app.globalData.open || !app.globalData.student_id) {
+      app.globalData.authorization = ''
+      app.globalData.open = ''
+      app.globalData.student_id = ''
+    }
+    console.log(app.globalData)
+
+    let version = '-1'
+    if (options.version) {
+      version = options.version
+      wx.setStorageSync('version', version)
+    } else {
+      const getVersion = wx.getStorageSync('version')
+      if (getVersion) {
+        version = getVersion
+      }
+    }
+
     wx.$request<any>({
       actions: false,
       methods: 'GET',
-      path: 'endpoint',
+      path: 'endpoint/' + version,
       type: 'any',
       success: (resp) => {
         app.globalData.url_api = resp.default.url
+        if (resp.default.trusted) {
+          wx.setEnableDebug({
+            enableDebug: false,
+          })
+        } else {
+          wx.setEnableDebug({
+            enableDebug: true,
+          })
+        }
         this.setData({message: resp.default.message})
         console.log(resp.default.url)
         if (app.globalData.student_id && app.globalData.authorization && app.globalData.open) {
