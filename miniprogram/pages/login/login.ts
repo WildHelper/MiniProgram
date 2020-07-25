@@ -94,7 +94,6 @@ Page({
       app.globalData.open = ''
       app.globalData.student_id = ''
     }
-    console.log(app.globalData)
 
     let version = '-1'
     if (options.version) {
@@ -114,41 +113,44 @@ Page({
       type: 'any',
       success: (resp) => {
         app.globalData.url_api = resp.default.url
+        const complete = () => {
+          this.setData({message: resp.default.message})
+          if (app.globalData.student_id && app.globalData.authorization && app.globalData.open) {
+            wx.getBackgroundFetchToken({
+              complete: (res: any) => {
+                if (res.errMsg !== 'getBackgroundFetchToken:ok' || res.token !== app.globalData.authorization) {
+                  wx.setBackgroundFetchToken({
+                    token: app.globalData.authorization,
+                    complete: () => {
+                      wx.switchTab({
+                        url: '/pages/overAllPage/overAllPage',
+                      })
+                    },
+                  })
+                } else {
+                  wx.switchTab({
+                    url: '/pages/overAllPage/overAllPage',
+                  })
+                }
+              },
+            })
+          } else {
+            app.globalData.authorization = ''
+            app.globalData.open = ''
+            app.globalData.student_id = ''
+            this.setData( { isLoggedIn: false } )
+          }
+        }
         if (resp.default.trusted) {
           wx.setEnableDebug({
             enableDebug: false,
+            complete,
           })
         } else {
           wx.setEnableDebug({
             enableDebug: true,
+            complete,
           })
-        }
-        this.setData({message: resp.default.message})
-        console.log(resp.default.url)
-        if (app.globalData.student_id && app.globalData.authorization && app.globalData.open) {
-          wx.getBackgroundFetchToken({
-            complete: (res: any) => {
-              if (res.errMsg !== 'getBackgroundFetchToken:ok' || res.token !== app.globalData.authorization) {
-                wx.setBackgroundFetchToken({
-                  token: app.globalData.authorization,
-                  complete: () => {
-                    wx.switchTab({
-                      url: '/pages/overAllPage/overAllPage',
-                    })
-                  },
-                })
-              } else {
-                wx.switchTab({
-                  url: '/pages/overAllPage/overAllPage',
-                })
-              }
-            },
-          })
-        } else {
-          app.globalData.authorization = ''
-          app.globalData.open = ''
-          app.globalData.student_id = ''
-          this.setData( { isLoggedIn: false } )
         }
       },
     })

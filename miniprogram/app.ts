@@ -145,12 +145,15 @@ wx.$validateType = (data, type): boolean => {
 }
 
 wx.$logout = () => {
-  let timeRemains = wx.getStorageSync('ad_times')
-  if (typeof timeRemains !== 'number' || isNaN(timeRemains)) {
-    timeRemains = 0
-  }
+  const timeRemains = wx.getStorageSync('ad_times')
+  const version = wx.getStorageSync('version')
   wx.clearStorageSync()
-  wx.setStorageSync('ad_times', timeRemains)
+  if (timeRemains) {
+    wx.setStorageSync('ad_times', timeRemains)
+  }
+  if (version) {
+    wx.setStorageSync('version', version)
+  }
   wx.setBackgroundFetchToken({
     token: '0',
   })
