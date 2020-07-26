@@ -11,7 +11,7 @@ App({
   // 全局变量
   globalData: {
     url_api: 'https://wild.applinzi.com/v2/',
-    url_logo: 'https://bjuthelper.applinzi.com/assets/logo.svg',
+    url_logo: 'https://wild.applinzi.com/assets/logo.svg',
     authorization: wx.getStorageSync('authorization3'),  // 用户唯一标识字段
     open: wx.getStorageSync('open'),
     student_id: wx.getStorageSync('student_id'),     // 学号
