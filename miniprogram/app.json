@@ -14,7 +14,7 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "@navBgColor",
-    "navigationBarTitleText": "野生工大助手",
+    "navigationBarTitleText": "野生助手",
     "navigationBarTextStyle":"@navTxtStyle",
     "backgroundColor": "@bgColor",
     "backgroundTextStyle": "@bgTxtStyle"

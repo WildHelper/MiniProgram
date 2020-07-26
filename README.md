@@ -38,7 +38,7 @@ Copyright (C) WildHelper
 
 ### GNU Affero GPL v3.0
 
-+ [WildHelper/WildHelper-MiniProgram](https://github.com/WildHelper/WildHelper-MiniProgram)
++ [WildHelper/MiniProgram](https://github.com/WildHelper/MiniProgram)
 
 ### MIT License
 

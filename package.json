@@ -1,7 +1,7 @@
 {
-  "name": "bjut-helper-mini-program",
+  "name": "wild-helper-mini-program",
   "version": "1.0.0",
-  "description": "野生工大助手小程序",
+  "description": "野生助手小程序",
   "main": "app.js",
   "dependencies": {
     "pako": "^1.0.11",
@@ -17,12 +17,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZE3kr/BjutHelper-MiniProgram.git"
+    "url": "git+https://github.com/WildHelper/MiniProgram.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ZE3kr/BjutHelper-MiniProgram/issues"
+    "url": "https://github.com/WildHelper/MiniProgram/issues"
   },
-  "homepage": "https://github.com/ZE3kr/BjutHelper-MiniProgram#readme"
+  "homepage": "https://github.com/WildHelper/MiniProgram#readme"
 }

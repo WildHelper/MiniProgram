@@ -3,6 +3,6 @@
     "mp-msg": "/miniprogram_npm/weui-miniprogram/msg/msg",
     "mp-loading": "/miniprogram_npm/weui-miniprogram/loading/loading"
   },
-  "navigationBarTitleText": "野生工大助手",
+  "navigationBarTitleText": "野生助手",
   "enablePullDownRefresh": true
 }
